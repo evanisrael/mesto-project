@@ -13,6 +13,9 @@
   white-space: nowrap;
   overflow: hidden;
   padding-bottom: 13px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: start;
 }
 
 .popup__input_text:last-child {

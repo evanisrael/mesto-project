@@ -7,6 +7,9 @@
   color: #FFFFFF;
   margin: 0;
   grid-area: description;
+  white-space: nowrap;
+  overflow: hidden;
+  text-align: start;
 }
 
 @media screen and (max-width: 998px) {
