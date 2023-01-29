@@ -49,3 +49,21 @@
 @import url(../blocks/element/__container/element__container.css);
 
 @import url(../blocks/element/__button/_active/element__button_active.css);
+
+@import url(../blocks/popup/popup.css);
+
+@import url(../blocks/popup/_opened/popup_opened.css);
+
+@import url(../blocks/popup/__container/popup__container.css);
+
+@import url(../blocks/popup/__form/popup__form.css);
+
+@import url(../blocks/popup/__field/popup__field.css);
+
+@import url(../blocks/popup/__title/popup__title.css);
+
+@import url(../blocks/popup/__input/_submit/popup__input_submit.css);
+
+@import url(../blocks/popup/__input/_text/popup__input_text.css);
+
+@import url(../blocks/popup/__close-button/popup__close-button.css);
