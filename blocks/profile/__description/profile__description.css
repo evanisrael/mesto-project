@@ -7,9 +7,11 @@
   color: #FFFFFF;
   margin: 0;
   grid-area: description;
+  text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   text-align: start;
+  max-width: 336px;
 }
 
 @media screen and (max-width: 998px) {
@@ -19,5 +21,6 @@
     text-align: center;
     justify-self: center;
     padding-bottom: 36px;
+    max-width: 282px;
   }
 }

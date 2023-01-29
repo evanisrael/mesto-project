@@ -9,8 +9,3 @@
   margin: 0;
   align-self: flex-end;
 }
-
-.element__button_active:hover {
-  opacity: 0.5;
-  transition: ease 0.5s;
-}
