@@ -1,8 +1,0 @@
-.popup_closed {
-  visibility: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: visibility 0.5s, opacity 0.5s ease;
-}

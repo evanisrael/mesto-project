@@ -5,6 +5,12 @@
   position: fixed;
   top: 0;
   left: 0;
+  visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: visibility 0.5s, opacity 0.5s ease;
 }
 
 .popup + #photo {
