@@ -24,48 +24,14 @@
       </section>
       <section class="elements">
         <ul class="elements__list">
-          <li class="element">
-            <img class="element__image" src="./images/karachaevsk.png" alt="Карачаевск">
-            <div class="element__container">
-              <h2 class="element__title">Карачаевск</h2>
-              <button class="element__button" type="button"></button>
-            </div>
-          </li>
-          <li class="element">
-            <img class="element__image" src="./images/elbrus.png" alt="Гора Эльбрус">
-            <div class="element__container">
-              <h2 class="element__title">Гора Эльбрус</h2>
-              <button class="element__button" type="button"></button>
-            </div>
-          </li>
-          <li class="element">
-            <img class="element__image" src="./images/dombai.svg" alt="Домбай">
-            <div class="element__container">
-              <h2 class="element__title">Домбай</h2>
-              <button class="element__button" type="button"></button>
-            </div>
-          </li>
-          <li class="element">
-            <img class="element__image" src="./images/elbrus.png" alt="Гора Эльбрус">
-            <div class="element__container">
-              <h2 class="element__title">Гора Эльбрус</h2>
-              <button class="element__button" type="button"></button>
-            </div>
-          </li>
-          <li class="element">
-            <img class="element__image" src="./images/dombai.svg" alt="Домбай">
-            <div class="element__container">
-              <h2 class="element__title">Домбай</h2>
-              <button class="element__button" type="button"></button>
-            </div>
-          </li>
-          <li class="element">
-            <img class="element__image" src="./images/karachaevsk.png" alt="Карачаевск">
-            <div class="element__container">
-              <h2 class="element__title">Карачаево-Черкессия</h2>
-              <button class="element__button" type="button"></button>
-            </div>
-          </li>
+          <template id="card-template">
+              <button class="element__trash-button" type="button"></button>
+              <img class="element__image" src="" alt="">
+              <div class="element__container">
+                <h2 class="element__title"></h2>
+                <button class="element__button" type="button"></button>
+              </div>
+          </template>
         </ul>
       </section>
     </main>
@@ -96,6 +62,13 @@
           </fieldset>
           <input class="popup__submit" type="submit" value="Сохранить" name="submit">
         </form>
+      </div>
+    </div>
+    <div class="popup popup_closed" id="photo">
+      <div class="popup__image-container">
+        <button class="popup__close-button" type="button" id="photo-close"></button>
+        <img class="popup__image">
+        <p class="popup__image-text"></p>
       </div>
     </div>
   </div>
