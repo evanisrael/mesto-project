@@ -1,0 +1,11 @@
+{
+  "name": "mesto",
+  "version": "0.0.1",
+  "description": "Проект курса \"Веб-разработка\" от Яндекс.Практикума по тематике \"Адаптивная и интерактивная верстка\"",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Ivan Israel",
+  "license": "ISC"
+}

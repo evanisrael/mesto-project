@@ -19,6 +19,15 @@ const popupTitle = document.querySelector('#popupTitle');
 const popupLink = document.querySelector('#popupImageLink');
 const profileName = content.querySelector('.profile__name');
 const profileDescription = content.querySelector('.profile__description');
+const pattern = /^[a-zA-Zа-яА-ЯёЁ\s-]+$/;
+const configObject = {
+  formSelector: '.popup__form',
+  inputSelector: '.popup__input',
+  submitButtonSelector: '.popup__submit',
+  inactiveButtonClass: 'popup__submit_inactive',
+  inputErrorClass: 'popup__input_type_error',
+  errorClass: 'popup__input-error_active'
+};
 
 
 
@@ -82,7 +91,10 @@ function createCardElement({ name, link }) {
   cardImage.alt = name;
   cardLikeButton.addEventListener('click', toggleLike);
   cardTrashButton.addEventListener('click', deleteCard);
-  cardImage.addEventListener('click', () => handleCardClick(cardElement));
+  cardImage.addEventListener('click', (evt) => {
+    evt.stopPropagation();
+    handleCardClick(cardElement);
+  });
   return cardElement;
 }
 
@@ -119,10 +131,102 @@ function updateProfile(evt) {
   closePopup(editPopup);
 }
 
-editButton.addEventListener('click', fillEditPopup);
-addButton.addEventListener('click', () => openPopup(addPopup));
+function handleEscButton (evt) {
+  const popup = document.querySelector('.popup_opened');
+  if (evt.key === 'Escape') {
+    closePopup(popup);
+  }
+}
+
+function handleOutsideClick(evt) {
+  const openedPopup = document.querySelector('.popup_opened');
+  if (openedPopup && !evt.target.closest('.popup__container') && !evt.target.closest('.popup__image-container')) {
+    closePopup(openedPopup);
+  }
+}
+
+
+editButton.addEventListener('click', (evt) => {
+  evt.stopPropagation();
+  fillEditPopup();
+});
+addButton.addEventListener('click', (evt) => {
+  evt.stopPropagation();
+  openPopup(addPopup);
+});
 closeEditButton.addEventListener('click', () => closePopup(editPopup));
 closeButtonAdd.addEventListener('click', () => closePopup(addPopup));
 closeButtonPhoto.addEventListener('click', () => closePopup(photoPopup));
 popupEditForm.addEventListener('submit', updateProfile);
 popupAddForm.addEventListener('submit', handleAddCardSubmit);
+document.addEventListener('keydown', handleEscButton);
+document.addEventListener('click', handleOutsideClick);
+
+
+const showInputError = (formElement, inputElement, errorMessage, configObject) => {
+  const errorElement = formElement.querySelector(`.${inputElement.id}-input-error`);
+  inputElement.classList.add(configObject.inputErrorClass);
+  errorElement.textContent = errorMessage;
+  errorElement.classList.add(configObject.errorClass);
+};
+
+
+const hideInputError = (formElement, inputElement) => {
+  const errorElement = formElement.querySelector(`.${inputElement.id}-input-error`);
+  inputElement.classList.remove(configObject.inputErrorClass);
+  errorElement.classList.remove(configObject.errorClass);
+  errorElement.textContent = '';
+};
+
+const checkInputValidity = (formElement, inputElement, configObject) => {
+  const errorText = inputElement.dataset.errorText;
+  const isValid = inputElement.validity.valid;
+  inputElement.setCustomValidity(inputElement.validity.patternMismatch ? errorText : '');
+  isValid ? hideInputError(formElement, inputElement, configObject) : showInputError(formElement, inputElement, inputElement.validationMessage, configObject);
+};
+
+
+const setEventListeners = (formElement, configObject) => {
+  const inputList = Array.from(formElement.querySelectorAll(configObject.inputSelector));
+  const buttonElement = formElement.querySelector(configObject.submitButtonSelector);
+  toggleButtonState(inputList, buttonElement, configObject);
+
+  inputList.forEach((inputElement) => {
+    inputElement.addEventListener('input', function () {
+      checkInputValidity(formElement, inputElement, configObject);
+      toggleButtonState(inputList, buttonElement, configObject);
+    });
+  });
+};
+
+
+const enableValidation = (configObject) => {
+  const formList = Array.from(document.querySelectorAll(configObject.formSelector));
+  formList.forEach((formElement) => {
+    formElement.addEventListener('submit', function (evt) {
+      evt.preventDefault();
+    });
+    setEventListeners(formElement, configObject);
+  });
+};
+
+
+enableValidation(configObject);
+
+
+function hasInvalidInput (inputList) {
+  return inputList.some((inputElement) => {
+    return !inputElement.validity.valid;
+  });
+}
+
+
+function toggleButtonState (inputList, buttonElement, configObject) {
+  if (hasInvalidInput(inputList)) {
+    buttonElement.classList.add(configObject.inactiveButtonClass);
+    buttonElement.disabled = true;
+  } else {
+    buttonElement.classList.remove(configObject.inactiveButtonClass);
+    buttonElement.disabled = false;
+  }
+}

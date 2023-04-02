@@ -43,11 +43,13 @@
     <div class="popup" id="edit">
       <div class="popup__container">
         <button class="popup__close-button" type="button"></button>
-        <form class="popup__form" name="form-name">
+        <form class="popup__form" name="form-name" novalidate>
           <h2 class="popup__title">Редактировать профиль</h2>
           <fieldset class="popup__field">
-            <input class="popup__input" type="text" placeholder="Имя" name="name" id="popupName">
-            <input class="popup__input" type="text" placeholder="Описание" name="description" id="popupDescription">
+            <input class="popup__input" type="text" placeholder="Имя" name="name" id="popupName" minlength="2" maxlength="40" pattern="^[a-zA-Zа-яА-ЯёЁ\-\s]+$" data-error-text="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" required>
+            <span class="popupName-input-error popup__input-error"></span>
+            <input class="popup__input" type="text" placeholder="Описание" name="description" id="popupDescription" minlength="2" maxlength="200" pattern="^[a-zA-Zа-яА-ЯёЁ\-\s]+$" data-error-text="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" required>
+            <span class="popupDescription-input-error popup__input-error"></span>
           </fieldset>
           <input class="popup__submit" type="submit" value="Сохранить" name="submit">
         </form>
@@ -56,11 +58,13 @@
     <div class="popup" id="add">
       <div class="popup__container">
         <button class="popup__close-button" type="button"></button>
-        <form class="popup__form" name="form-name">
+        <form class="popup__form" name="form-name" novalidate>
           <h2 class="popup__title">Новое место</h2>
           <fieldset class="popup__field">
-            <input class="popup__input" type="text" placeholder="Название" name="title" id="popupTitle">
-            <input class="popup__input" type="url" placeholder="Ссылка на картинку" name="ImageLink" id="popupImageLink">
+            <input class="popup__input" type="text" placeholder="Название" name="title" id="popupTitle" minlength="2" maxlength="30" pattern="^[a-zA-Zа-яА-ЯёЁ\-\s]+$" data-error-text="Разрешены только латинские, кириллические буквы, знаки дефиса и пробелы" required>
+            <span class="popupTitle-input-error popup__input-error"></span>
+            <input class="popup__input" type="url" placeholder="Ссылка на картинку" name="ImageLink" id="popupImageLink" required>
+            <span class="popupImageLink-input-error popup__input-error"></span>
           </fieldset>
           <input class="popup__submit" type="submit" value="Сохранить" name="submit">
         </form>
