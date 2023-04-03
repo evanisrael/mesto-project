@@ -1,6 +1,6 @@
 import './pages/index.css';
 import { initialCards } from './components/card.js';
-import { closePopup, openPopup, handleEscButton, handleOutsideClick, updateProfile, fillEditPopup } from "./components/modal.js";
+import { closePopup, openPopup, updateProfile, fillEditPopup } from "./components/modal.js";
 import { enableValidation } from "./components/validate.js";
 import { createCardElement, handleAddCardSubmit } from "./components/utils";
 
@@ -56,8 +56,6 @@ closeButtonAdd.addEventListener('click', () => closePopup(addPopup));
 closeButtonPhoto.addEventListener('click', () => closePopup(photoPopup));
 popupEditForm.addEventListener('submit', updateProfile);
 popupAddForm.addEventListener('submit', handleAddCardSubmit);
-document.addEventListener('keydown', handleEscButton);
-document.addEventListener('click', handleOutsideClick);
 
 
 export { configObject, photoPopupImage, photoPopupText, photoPopup,

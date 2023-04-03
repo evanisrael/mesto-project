@@ -1,11 +1,16 @@
 import { popupName, popupDescription, profileName, profileDescription, editPopup } from "../index.js";
 
+
 function openPopup(popup) {
   popup.classList.add('popup_opened');
+  document.addEventListener('keydown', handleEscButton);
+  popup.addEventListener('click', handleOutsideClick);
 }
 
 function closePopup(popup) {
   popup.classList.remove('popup_opened');
+  document.removeEventListener('keydown', handleEscButton);
+  popup.addEventListener('click', handleOutsideClick);
 }
 
 function handleEscButton (evt) {
@@ -35,4 +40,4 @@ function fillEditPopup () {
   openPopup(editPopup);
 }
 
-export { openPopup, closePopup, handleEscButton, handleOutsideClick, updateProfile, fillEditPopup };
+export { openPopup, closePopup, updateProfile, fillEditPopup };
