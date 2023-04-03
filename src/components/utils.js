@@ -1,5 +1,5 @@
 import { deleteCard, toggleLike, handleCardClick } from './card.js';
-import { cardTemplate, popupTitle, popupLink, elementsList, addPopup, popupAddForm } from "../index.js";
+import { cardTemplate, popupTitle, popupLink, elementsList, addPopup, popupAddForm, configObject } from "../index.js";
 import { closePopup } from "./modal.js";
 
 function createCardElement({ name, link }) {
@@ -26,6 +26,9 @@ function handleAddCardSubmit(evt) {
   elementsList.insertBefore(addedCard, elementsList.firstChild);
   closePopup(addPopup);
   popupAddForm.reset();
+  const submitButton = addPopup.querySelector('.popup__submit');
+  submitButton.disabled = true;
+  submitButton.classList.add(configObject.inactiveButtonClass);
 }
 
 export { createCardElement, handleAddCardSubmit };

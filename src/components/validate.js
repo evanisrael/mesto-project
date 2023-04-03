@@ -9,7 +9,7 @@ const showInputError = (formElement, inputElement, errorMessage, configObject) =
 };
 
 
-const hideInputError = (formElement, inputElement) => {
+const hideInputError = (formElement, inputElement, configObject) => {
   const errorElement = formElement.querySelector(`.${inputElement.id}-input-error`);
   inputElement.classList.remove(configObject.inputErrorClass);
   errorElement.classList.remove(configObject.errorClass);
