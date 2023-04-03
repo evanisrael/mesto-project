@@ -8,16 +8,13 @@ import { createCardElement, handleAddCardSubmit } from "./components/utils";
 const content = document.querySelector('.page');
 const editButton = content.querySelector('.profile__edit-button');
 const editPopup = content.querySelector('#edit');
-const closeEditButton = editPopup.querySelector('.popup__close-button');
 const popupName = content.querySelector('#popupName');
 const popupDescription = content.querySelector('#popupDescription');
 const popupEditForm = editPopup.querySelector('.popup__form');
 const addButton = content.querySelector('.profile__add-button');
 const addPopup = content.querySelector('#add');
-const closeButtonAdd = addPopup.querySelector('.popup__close-button');
 const popupAddForm = addPopup.querySelector('.popup__form');
 const photoPopup = content.querySelector('#photo');
-const closeButtonPhoto = photoPopup.querySelector('.popup__close-button');
 const photoPopupImage = photoPopup.querySelector('.popup__image');
 const photoPopupText = photoPopup.querySelector('.popup__image-text');
 const cardTemplate = document.querySelector('#card-template');
@@ -26,6 +23,7 @@ const popupTitle = document.querySelector('#popupTitle');
 const popupLink = document.querySelector('#popupImageLink');
 const profileName = content.querySelector('.profile__name');
 const profileDescription = content.querySelector('.profile__description');
+const closeButtons = document.querySelectorAll('.popup__close-button');
 const configObject = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
@@ -51,9 +49,10 @@ addButton.addEventListener('click', (evt) => {
   evt.stopPropagation();
   openPopup(addPopup);
 });
-closeEditButton.addEventListener('click', () => closePopup(editPopup));
-closeButtonAdd.addEventListener('click', () => closePopup(addPopup));
-closeButtonPhoto.addEventListener('click', () => closePopup(photoPopup));
+closeButtons.forEach((button) => { 
+  const popup = button.closest('.popup');
+  button.addEventListener('click', () => closePopup(popup));
+});
 popupEditForm.addEventListener('submit', updateProfile);
 popupAddForm.addEventListener('submit', handleAddCardSubmit);
 
