@@ -1,8 +1,8 @@
 import './pages/index.css';
-import { initialCards } from './components/card.js';
 import { closePopup, openPopup, updateProfile, fillEditPopup } from "./components/modal.js";
 import { enableValidation } from "./components/validate.js";
-import { createCardElement, handleAddCardSubmit } from "./components/utils";
+import { createCardElement, handleAddCardSubmit, handleAvatarFormSubmit } from "./components/utils";
+import { getInitialCards, getUserInfo } from './components/api.js';
 
 
 const content = document.querySelector('.page');
@@ -24,6 +24,12 @@ const popupLink = document.querySelector('#popupImageLink');
 const profileName = content.querySelector('.profile__name');
 const profileDescription = content.querySelector('.profile__description');
 const closeButtons = document.querySelectorAll('.popup__close-button');
+const profileAvatar = document.querySelector(".profile__avatar");
+const avatarEditButton = document.querySelector('.profile__edit-avatar-button');
+const avatarPopup = document.querySelector('#avatar');
+const popupAvatarForm = avatarPopup.querySelector('.popup__form');
+let myId = null;
+let cards = null;
 const configObject = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
@@ -32,10 +38,6 @@ const configObject = {
   inputErrorClass: 'popup__input_type_error',
   errorClass: 'popup__input-error_active'
 };
-
-
-const cardElements = initialCards.map(createCardElement);
-cardElements.forEach(cardElement => elementsList.appendChild(cardElement));
 
 
 enableValidation(configObject);
@@ -49,14 +51,51 @@ addButton.addEventListener('click', (evt) => {
   evt.stopPropagation();
   openPopup(addPopup);
 });
+avatarEditButton.addEventListener('click', (evt) => {
+  evt.stopPropagation();
+  openPopup(avatarPopup);
+});
 closeButtons.forEach((button) => { 
   const popup = button.closest('.popup');
   button.addEventListener('click', () => closePopup(popup));
 });
 popupEditForm.addEventListener('submit', updateProfile);
 popupAddForm.addEventListener('submit', handleAddCardSubmit);
+popupAvatarForm.addEventListener('submit', handleAvatarFormSubmit);
 
 
 export { configObject, photoPopupImage, photoPopupText, photoPopup,
  cardTemplate, popupName, popupDescription, profileName, profileDescription,
- editPopup, popupTitle, popupLink, elementsList, addPopup, popupAddForm };
+ editPopup, popupTitle, popupLink, elementsList, addPopup, popupAddForm, avatarPopup, popupAvatarForm, myId, cards };
+
+ getUserInfo()
+ .then(userData => {
+   profileName.textContent = userData.name;
+   profileDescription.textContent = userData.about;
+   profileAvatar.src = userData.avatar;
+   myId = userData._id;
+ })
+ .catch(error => console.error(error));
+
+getInitialCards()
+  .then(data => {
+    const cardElements = data.map(createCardElement);
+    cardElements.forEach(cardElement => {
+      elementsList.appendChild(cardElement);
+      const cardObject = JSON.parse(cardElement.dataset.cardObject);
+      const likeButton = cardElement.querySelector('.element__button');
+      if (cardObject.likes.map((item) => item._id).includes(myId)) {
+        likeButton.classList.add('element__button_active');
+      } else {
+        likeButton.classList.remove('element__button_active');
+      };
+    });
+    cards = data;
+  })
+  .catch(error => console.error(error));
+
+
+
+
+
+

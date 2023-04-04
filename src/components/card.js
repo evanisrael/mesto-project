@@ -1,44 +1,44 @@
-import { photoPopupImage, photoPopupText, photoPopup } from "../index.js";
+import { photoPopupImage, photoPopupText, photoPopup, myId, cards } from "../index.js";
 import { openPopup } from "./modal.js";
+import { deleteSelectedCard, addLike, removeLike } from "./api.js";
 
-const initialCards = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-];
 
 function deleteCard(evt) {
   if (evt.target.classList.contains('element__trash-button')) {
     const card = evt.target.closest('.element');
-    card.remove();
+    const cardId = card.dataset.cardId;
+    deleteSelectedCard(cardId)
+      .then(() => {
+        card.remove();
+      })
+      .catch(error => console.error(error));
   }
 }
 
 function toggleLike(evt) {
   const likeButton = evt.target;
   if (likeButton.classList.contains('element__button')) {
-    likeButton.classList.toggle('element__button_active');
+    const card = likeButton.closest('.element');
+    const cardId = card.dataset.cardId;
+    const isLiked = likeButton.classList.contains('element__button_active');
+    
+    if (isLiked) {
+      removeLike(cardId)
+        .then(updatedCard => {
+          likeButton.classList.remove('element__button_active');
+          const likesNumber = updatedCard.likes.length;
+          card.querySelector('.element__like-number').textContent = likesNumber;
+        })
+        .catch(error => console.error(error));
+    } else {
+      addLike(cardId)
+        .then(updatedCard => {
+          likeButton.classList.add('element__button_active');
+          const likesNumber = updatedCard.likes.length;
+          card.querySelector('.element__like-number').textContent = likesNumber;
+        })
+        .catch(error => console.error(error));
+    }
   }
 }
 
@@ -51,4 +51,12 @@ function handleCardClick(card) {
   openPopup(photoPopup);
 }
 
-export { initialCards, deleteCard, toggleLike, handleCardClick };
+function checkCardOwner(ownerId, cardTrashButton) {
+  if (ownerId === myId) {
+    cardTrashButton.style.visibility = 'visible';
+  } else {
+    cardTrashButton.style.visibility = 'hidden';
+  }
+}
+
+export { deleteCard, toggleLike, handleCardClick, checkCardOwner };

@@ -1,4 +1,5 @@
 import { popupName, popupDescription, profileName, profileDescription, editPopup } from "../index.js";
+import { updateUserInfo } from './api.js';
 
 
 function openPopup(popup) {
@@ -27,12 +28,26 @@ function handleOutsideClick(evt) {
   }
 }
 
+
 function updateProfile(evt) {
   evt.preventDefault();
-  profileName.textContent = popupName.value;
-  profileDescription.textContent = popupDescription.value;
-  closePopup(editPopup);
+  const submitButton = editPopup.querySelector('.popup__submit');
+  submitButton.value = 'Сохранение...';
+  const newName = popupName.value;
+  const newAbout = popupDescription.value;
+
+  updateUserInfo(newName, newAbout)
+    .then((data) => {
+      profileName.textContent = data.name;
+      profileDescription.textContent = data.about;
+      closePopup(editPopup);
+      submitButton.value = 'Сохранить';
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 }
+
 
 function fillEditPopup () {
   popupName.value = profileName.textContent;
@@ -41,3 +56,7 @@ function fillEditPopup () {
 }
 
 export { openPopup, closePopup, updateProfile, fillEditPopup };
+
+
+
+
