@@ -28,6 +28,7 @@ const profileAvatar = document.querySelector(".profile__avatar");
 const avatarEditButton = document.querySelector('.profile__edit-avatar-button');
 const avatarPopup = document.querySelector('#avatar');
 const popupAvatarForm = avatarPopup.querySelector('.popup__form');
+const popupAvatarInput = popupAvatarForm.querySelector('.popup__input');
 let myId = null;
 let cards = null;
 const configObject = {
@@ -66,9 +67,9 @@ popupAvatarForm.addEventListener('submit', handleAvatarFormSubmit);
 
 export { configObject, photoPopupImage, photoPopupText, photoPopup,
  cardTemplate, popupName, popupDescription, profileName, profileDescription,
- editPopup, popupTitle, popupLink, elementsList, addPopup, popupAddForm, avatarPopup, popupAvatarForm, myId, cards };
+ editPopup, popupTitle, popupLink, elementsList, addPopup, popupAddForm, avatarPopup, popupAvatarForm, myId, cards, popupAvatarInput, profileAvatar };
 
- 
+
   Promise.all([getUserInfo(), getInitialCards()])
   .then(([userData, cards]) => {
     profileName.textContent = userData.name;

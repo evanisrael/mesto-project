@@ -1,5 +1,5 @@
 import { deleteCard, toggleLike, handleCardClick, checkCardOwner } from './card.js';
-import { cardTemplate, popupTitle, popupLink, elementsList, addPopup, popupAddForm, configObject, avatarPopup, popupAvatarForm } from "../index.js";
+import { cardTemplate, popupTitle, popupLink, elementsList, addPopup, popupAddForm, configObject, avatarPopup, popupAvatarForm, popupAvatarInput, profileAvatar } from "../index.js";
 import { closePopup } from "./modal.js";
 import { updateAvatar, addCardToServer } from "./api.js";
 
@@ -29,8 +29,7 @@ function createCardElement({ name, link, likes, owner, _id }) {
 
 function handleAddCardSubmit(evt) {
   evt.preventDefault();
-  const submitButton = addPopup.querySelector('.popup__submit');
-  submitButton.value = 'Сохранение...';
+  evt.submitter.value = 'Сохранение...';
   const title = popupTitle.value;
   const link = popupLink.value;
   
@@ -40,34 +39,35 @@ function handleAddCardSubmit(evt) {
       elementsList.insertBefore(addedCard, elementsList.firstChild);
       closePopup(addPopup);
       popupAddForm.reset();
-      submitButton.value = 'Сохранить';
-      submitButton.disabled = true;
-      submitButton.classList.add(configObject.inactiveButtonClass);
+      evt.submitter.disabled = true;
+      evt.submitter.classList.add(configObject.inactiveButtonClass);
     })
     .catch(err => {
       console.log(err);
+    })
+    .finally(() => {
+      evt.submitter.value = 'Сохранить';
     });
 };
 
 function handleAvatarFormSubmit(evt) {
   evt.preventDefault();
-  const submitButton = avatarPopup.querySelector('.popup__submit');
-  submitButton.value = 'Сохранение...';
-  const input = popupAvatarForm.querySelector('.popup__input');
-  const newAvatar = input.value;
+  evt.submitter.value = 'Сохранение...';
+  const newAvatar = popupAvatarInput.value;
 
   updateAvatar(newAvatar)
     .then((data) => {
-      const avatarElement = document.querySelector('.profile__avatar');
-      avatarElement.src = data.avatar;
+      profileAvatar.src = data.avatar;
       closePopup(avatarPopup);
-      submitButton.value = 'Сохранить';
       popupAvatarForm.reset();
-      submitButton.disabled = true;
-      submitButton.classList.add(configObject.inactiveButtonClass);
+      evt.submitter.disabled = true;
+      evt.submitter.classList.add(configObject.inactiveButtonClass);
     })
     .catch((err) => {
       console.error(err);
+    })
+    .finally(() => {
+      evt.submitter.value = 'Сохранить';
     });
 }
 
