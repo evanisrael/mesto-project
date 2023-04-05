@@ -68,18 +68,14 @@ export { configObject, photoPopupImage, photoPopupText, photoPopup,
  cardTemplate, popupName, popupDescription, profileName, profileDescription,
  editPopup, popupTitle, popupLink, elementsList, addPopup, popupAddForm, avatarPopup, popupAvatarForm, myId, cards };
 
- getUserInfo()
- .then(userData => {
-   profileName.textContent = userData.name;
-   profileDescription.textContent = userData.about;
-   profileAvatar.src = userData.avatar;
-   myId = userData._id;
- })
- .catch(error => console.error(error));
-
-getInitialCards()
-  .then(data => {
-    const cardElements = data.map(createCardElement);
+ 
+  Promise.all([getUserInfo(), getInitialCards()])
+  .then(([userData, cards]) => {
+    profileName.textContent = userData.name;
+    profileDescription.textContent = userData.about;
+    profileAvatar.src = userData.avatar;
+    myId = userData._id;
+    const cardElements = cards.map(createCardElement);
     cardElements.forEach(cardElement => {
       elementsList.appendChild(cardElement);
       const cardObject = JSON.parse(cardElement.dataset.cardObject);
@@ -90,9 +86,10 @@ getInitialCards()
         likeButton.classList.remove('element__button_active');
       };
     });
-    cards = data;
   })
-  .catch(error => console.error(error));
+  .catch(err => {
+    console.error(err);
+  });
 
 
 

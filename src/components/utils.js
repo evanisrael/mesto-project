@@ -53,8 +53,7 @@ function handleAvatarFormSubmit(evt) {
   evt.preventDefault();
   const submitButton = avatarPopup.querySelector('.popup__submit');
   submitButton.value = 'Сохранение...';
-  const form = avatarPopup.querySelector('.popup__form');
-  const input = form.querySelector('.popup__input');
+  const input = popupAvatarForm.querySelector('.popup__input');
   const newAvatar = input.value;
 
   updateAvatar(newAvatar)
@@ -64,11 +63,24 @@ function handleAvatarFormSubmit(evt) {
       closePopup(avatarPopup);
       submitButton.value = 'Сохранить';
       popupAvatarForm.reset();
+      submitButton.disabled = true;
+      submitButton.classList.add(configObject.inactiveButtonClass);
     })
     .catch((err) => {
       console.error(err);
     });
 }
 
+function request(url, options) {
+  return fetch(url, options).then(checkResponse);
+}
 
-export { createCardElement, handleAddCardSubmit, handleAvatarFormSubmit };
+function checkResponse(res) {
+  if (res.ok) {
+    return res.json();
+  }
+  return Promise.reject(`Ошибка: ${res.status}`);
+}
+
+
+export { createCardElement, handleAddCardSubmit, handleAvatarFormSubmit, checkResponse, request };

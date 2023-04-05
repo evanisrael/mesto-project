@@ -1,5 +1,6 @@
 import { popupName, popupDescription, profileName, profileDescription, editPopup } from "../index.js";
 import { updateUserInfo } from './api.js';
+import { renderLoading, handleSubmit } from "./utils.js";
 
 
 function openPopup(popup) {
@@ -31,8 +32,7 @@ function handleOutsideClick(evt) {
 
 function updateProfile(evt) {
   evt.preventDefault();
-  const submitButton = editPopup.querySelector('.popup__submit');
-  submitButton.value = 'Сохранение...';
+  evt.submitter.value = 'Сохранение...';
   const newName = popupName.value;
   const newAbout = popupDescription.value;
 
@@ -41,10 +41,12 @@ function updateProfile(evt) {
       profileName.textContent = data.name;
       profileDescription.textContent = data.about;
       closePopup(editPopup);
-      submitButton.value = 'Сохранить';
     })
     .catch((err) => {
       console.log(err);
+    })
+    .finally(() => {
+      evt.submitter.value = 'Сохранить';
     });
 }
 
