@@ -19,6 +19,7 @@
 * JavaScript (ES6+)
 * Webpack
 * Babel
+* Node.js
 * Working with API, HTTP requests
 
 ### Link to the project 🌐
@@ -44,12 +45,13 @@ The project is available at: https://kwentaru.github.io/mesto-project/
 Просмотр фотографии в полном размере
 
 ### Технологии 🚀
-HTML
-CSS (flexbox, grid)
-JavaScript (ES6+)
-Webpack
-Babel
-Работа с API, HTTP запросы
+* HTML
+* CSS (flexbox, grid)
+* JavaScript (ES6+)
+* Webpack
+* Babel
+* Node.js
+* Работа с API, HTTP запросы
 
 ### Ссылка на проект 🌐
 Проект доступен по ссылке: https://kwentaru.github.io/mesto-project/
