@@ -24,7 +24,7 @@
 
 ### Link to the project 🌐
 
-The project is available at: https://kwentaru.github.io/mesto-project/
+The project is available [here](https://marehori.github.io/mesto-project/)
 
 ### Contact me test📧
 
@@ -54,7 +54,7 @@ The project is available at: https://kwentaru.github.io/mesto-project/
 * Работа с API, HTTP запросы
 
 ### Ссылка на проект 🌐
-Проект доступен по ссылке: https://kwentaru.github.io/mesto-project/
+Проект доступен по [ссылке](https://marehori.github.io/mesto-project/)
 
 ### Для связи 📧
 * Email: kwentar@gmail.com
