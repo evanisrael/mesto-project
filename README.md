@@ -26,7 +26,7 @@
 
 The project is available at: https://kwentaru.github.io/mesto-project/
 
-### Contact me 📧
+### Contact me test📧
 
 * Email: kwentar@gmail.com
 * LinkedIn: [Profile](https://www.linkedin.com/in/ivan-israel/)
