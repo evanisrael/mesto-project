@@ -15,8 +15,7 @@ const addButton = content.querySelector('.profile__add-button');
 const addPopup = content.querySelector('#add');
 const popupAddForm = addPopup.querySelector('.popup__form');
 const photoPopup = content.querySelector('#photo');
-const photoPopupImage = photoPopup.querySelector('.popup__image');
-const photoPopupText = photoPopup.querySelector('.popup__image-text');
+
 const cardTemplate = document.querySelector('#card-template');
 const elementsList = document.querySelector('.elements__list');
 const popupTitle = document.querySelector('#popupTitle');
@@ -56,41 +55,39 @@ avatarEditButton.addEventListener('click', (evt) => {
   evt.stopPropagation();
   openPopup(avatarPopup);
 });
-closeButtons.forEach((button) => { 
-  const popup = button.closest('.popup');
-  button.addEventListener('click', () => closePopup(popup));
-});
+
 popupEditForm.addEventListener('submit', updateProfile);
 popupAddForm.addEventListener('submit', handleAddCardSubmit);
 popupAvatarForm.addEventListener('submit', handleAvatarFormSubmit);
 
 
-export { configObject, photoPopupImage, photoPopupText, photoPopup,
- cardTemplate, popupName, popupDescription, profileName, profileDescription,
- editPopup, popupTitle, popupLink, elementsList, addPopup, popupAddForm, avatarPopup, popupAvatarForm, myId, cards, popupAvatarInput, profileAvatar };
+// export { configObject, photoPopupImage, photoPopupText, photoPopup,
+//  cardTemplate, popupName, popupDescription, profileName, profileDescription,
+//  editPopup, popupTitle, popupLink, elementsList, addPopup, popupAddForm, avatarPopup, popupAvatarForm, myId, cards, popupAvatarInput, profileAvatar };
 
 
-  Promise.all([getUserInfo(), getInitialCards()])
-  .then(([userData, cards]) => {
-    profileName.textContent = userData.name;
-    profileDescription.textContent = userData.about;
-    profileAvatar.src = userData.avatar;
-    myId = userData._id;
-    const cardElements = cards.map(createCardElement);
-    cardElements.forEach(cardElement => {
-      elementsList.appendChild(cardElement);
-      const cardObject = JSON.parse(cardElement.dataset.cardObject);
-      const likeButton = cardElement.querySelector('.element__button');
-      if (cardObject.likes.map((item) => item._id).includes(myId)) {
-        likeButton.classList.add('element__button_active');
-      } else {
-        likeButton.classList.remove('element__button_active');
-      };
-    });
-  })
-  .catch(err => {
-    console.error(err);
+
+Promise.all([getUserInfo(), getInitialCards()])
+.then(([userData, cards]) => {
+  profileName.textContent = userData.name;
+  profileDescription.textContent = userData.about;
+  profileAvatar.src = userData.avatar;
+  myId = userData._id;
+  const cardElements = cards.map(createCardElement);
+  cardElements.forEach(cardElement => {
+    elementsList.appendChild(cardElement);
+    const cardObject = JSON.parse(cardElement.dataset.cardObject);
+    const likeButton = cardElement.querySelector('.element__button');
+    if (cardObject.likes.map((item) => item._id).includes(myId)) {
+      likeButton.classList.add('element__button_active');
+    } else {
+      likeButton.classList.remove('element__button_active');
+    };
   });
+})
+.catch(err => {
+  console.error(err);
+});
 
 
 

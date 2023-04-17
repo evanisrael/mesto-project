@@ -1,4 +1,5 @@
 import { api } from "./Api.js";
+import {photoPopup} from "../index";
 
 
 
@@ -60,7 +61,16 @@ class Card {
       cardTrashButton.style.visibility = 'hidden';
     }
   }
-
+  _handleCardClick(card) {
+      const cardTitle = card.querySelector('.element__title').textContent;
+      const cardImage = card.querySelector('.element__image').src;
+      const photoPopupImage = document.querySelector('.popup__image');
+      const photoPopupText = document.querySelector('.popup__image-text');
+      photoPopupImage.src = cardImage;
+      photoPopupImage.alt = cardTitle;
+      photoPopupText.textContent = cardTitle;
+      openPopup(photoPopup);
+  }
 
   createCardElement({ name, link, likes, owner, _id }) {
     const cardElement = this.cardTemplate.content.cloneNode(true).querySelector('.element');
@@ -79,7 +89,7 @@ class Card {
     cardTrashButton.addEventListener('click', this.deleteCard);
     cardImage.addEventListener('click', (evt) => {
       evt.stopPropagation();
-      handleCardClick(cardElement);
+      this._handleCardClick(cardElement);
     });
     this.checkCardOwner(owner._id, cardTrashButton);
     return cardElement;

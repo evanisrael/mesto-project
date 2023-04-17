@@ -6,7 +6,6 @@ class Popup {
     this.popup = popup;
   }
 
-
   openPopup() {
     this.popup.classList.add('popup_opened');
     document.addEventListener('keydown', this._handleEscButton);

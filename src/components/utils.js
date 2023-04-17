@@ -3,30 +3,6 @@ import { cardTemplate, popupTitle, popupLink, elementsList, addPopup, popupAddFo
 import { closePopup } from "./Popup.js";
 import { updateAvatar, addCardToServer } from "./Api.js";
 
-function createCardElement({ name, link, likes, owner, _id }) {
-  const cardElement = cardTemplate.content.cloneNode(true).querySelector('.element');
-  const cardTitle = cardElement.querySelector('.element__title');
-  const cardImage = cardElement.querySelector('.element__image');
-  const cardLikeButton = cardElement.querySelector('.element__button');
-  const cardTrashButton = cardElement.querySelector('.element__trash-button');
-  const cardLikeNumber = cardElement.querySelector('.element__like-number');
-  cardElement.dataset.cardId = _id;
-  cardElement.dataset.cardObject = JSON.stringify({ name, link, likes, owner, _id });
-  cardTitle.textContent = name;
-  cardImage.src = link;
-  cardImage.alt = name;
-  cardLikeNumber.textContent = likes.length;
-  cardLikeButton.addEventListener('click', toggleLike);
-  cardTrashButton.addEventListener('click', deleteCard);
-  cardImage.addEventListener('click', (evt) => {
-    evt.stopPropagation();
-    handleCardClick(cardElement);
-  });
-  checkCardOwner(owner._id, cardTrashButton);
-  return cardElement;
-}
-
-
 function handleAddCardSubmit(evt) {
   evt.preventDefault();
   evt.submitter.value = 'Сохранение...';
@@ -71,16 +47,4 @@ function handleAvatarFormSubmit(evt) {
     });
 }
 
-function request(url, options) {
-  return fetch(url, options).then(checkResponse);
-}
-
-function checkResponse(res) {
-  if (res.ok) {
-    return res.json();
-  }
-  return Promise.reject(`Ошибка: ${res.status}`);
-}
-
-
-export { createCardElement, handleAddCardSubmit, handleAvatarFormSubmit, checkResponse, request };
+export {  handleAddCardSubmit, handleAvatarFormSubmit, };
