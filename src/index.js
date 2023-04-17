@@ -1,8 +1,8 @@
 import './pages/index.css';
-import { closePopup, openPopup, updateProfile, fillEditPopup } from "./components/modal.js";
-import { enableValidation } from "./components/validate.js";
+import { closePopup, openPopup, updateProfile, fillEditPopup } from "./components/Popup.js";
+import { enableValidation } from "./components/FormValidator.js";
 import { createCardElement, handleAddCardSubmit, handleAvatarFormSubmit } from "./components/utils";
-import { getInitialCards, getUserInfo } from './components/api.js';
+import { getInitialCards, getUserInfo } from './components/Api.js';
 
 
 const content = document.querySelector('.page');
