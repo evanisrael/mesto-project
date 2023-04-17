@@ -1,7 +1,7 @@
-import { deleteCard, toggleLike, handleCardClick, checkCardOwner } from './card.js';
+import { deleteCard, toggleLike, handleCardClick, checkCardOwner } from './Card.js';
 import { cardTemplate, popupTitle, popupLink, elementsList, addPopup, popupAddForm, configObject, avatarPopup, popupAvatarForm, popupAvatarInput, profileAvatar } from "../index.js";
-import { closePopup } from "./modal.js";
-import { updateAvatar, addCardToServer } from "./api.js";
+import { closePopup } from "./Popup.js";
+import { updateAvatar, addCardToServer } from "./Api.js";
 
 function createCardElement({ name, link, likes, owner, _id }) {
   const cardElement = cardTemplate.content.cloneNode(true).querySelector('.element');
