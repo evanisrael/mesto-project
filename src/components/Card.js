@@ -2,7 +2,6 @@ import { api } from "./Api.js";
 import { photoPopupImage, photoPopupText, photoPopup } from './consts.js';
 
 
-
 class Card {
   constructor({ name, link, likes, owner, _id, cardTemplate, myId }) {
     this.name = name;

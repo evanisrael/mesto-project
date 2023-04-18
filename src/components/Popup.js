@@ -7,6 +7,7 @@ class Popup {
   }
 
   openPopup() {
+    // console.log(this.popup.classList);
     this.popup.classList.add('popup_opened');
     document.addEventListener('keydown', this._handleEscButton);
     this.popup.addEventListener('click', this._handleOutsideClick);
@@ -34,7 +35,7 @@ class Popup {
 
   setEventListeners() {
     //добавляет слушатель клика иконке закрытия попапа. Модальное окно также закрывается при клике на затемнённую область вокруг формы.
-    closeButtons.forEach((button) => { 
+    closeButtons.forEach((button) => {
       const popup = button.closest('.popup');
       button.addEventListener('click', () => closePopup(popup));
     });

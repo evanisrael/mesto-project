@@ -1,10 +1,11 @@
 import {Popup} from "./Popup";
 
 class PopupWithForm extends Popup {
-    constructor(popup, hendlerFormSubmit) {
+    constructor(popup, handlerFormSubmit) {
         super(popup);
         this.popup = popup
-        this.hendlerFormSubmit = hendlerFormSubmit
+        console.log(this.popup)
+        this.hendlerFormSubmit = handlerFormSubmit
     }
     _getInputValues() {
         // собирает данные всех полей формы.

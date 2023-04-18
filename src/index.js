@@ -1,10 +1,16 @@
 import './pages/index.css';
 // import { closePopup, openPopup, updateProfile, fillEditPopup } from "./components/Popup.js";
 // import { enableValidation } from "./components/FormValidator.js";
-// import { createCardElement, handleAddCardSubmit, handleAvatarFormSubmit } from "./components/utils";
+import { handleAddCardSubmit,
+   handleAvatarFormSubmit } from "./components/utils";
 import { api } from './components/Api.js';
 import { Card } from './components/Card.js'
-import { profileName, profileDescription, profileAvatar, cardTemplate, elementsList } from './components/consts.js';
+import { profileName, profileDescription, profileAvatar, cardTemplate,
+   elementsList, avatarPopup, avatarEditButton, addPopup, addButton, editPopup,
+   } from './components/consts.js';
+import { PopupWithForm } from './components/PopupWithForm.js';
+import { PopupWithImage } from './components/PopupWithImage.js';
+import { updateProfile } from './components/UserInfo';
 
 
 // let cards = null;
@@ -13,24 +19,48 @@ import { profileName, profileDescription, profileAvatar, cardTemplate, elementsL
 // enableValidation(configObject);
 
 
-// editButton.addEventListener('click', (evt) => {
-//   evt.stopPropagation();
-//   fillEditPopup();
-// });
-// addButton.addEventListener('click', (evt) => {
-//   evt.stopPropagation();
-//   openPopup(addPopup);
-// });
-// avatarEditButton.addEventListener('click', (evt) => {
-//   evt.stopPropagation();
-//   openPopup(avatarPopup);
-// });
+
+
+
 
 // popupEditForm.addEventListener('submit', updateProfile);
 // popupAddForm.addEventListener('submit', handleAddCardSubmit);
 // popupAvatarForm.addEventListener('submit', handleAvatarFormSubmit);
 
+const avatarPop = new PopupWithForm (
+  avatarPopup, handleAvatarFormSubmit
+);
+const editPop = new PopupWithForm (
+  editPopup, updateProfile
+);
+const addPop = new PopupWithForm (
+  addPopup, handleAddCardSubmit
+);
+// const photoPop = new PopupWithImage (
 
+// );
+// const delPop = new Popup ();
+
+avatarEditButton.addEventListener('click', (evt) => {
+  evt.stopPropagation();
+  avatarPop.openPopup();
+});
+
+addButton.addEventListener('click', (evt) => {
+  evt.stopPropagation();
+  addPop.openPopup();
+});
+
+editButton.addEventListener('click', (evt) => {
+  evt.stopPropagation();
+  fillEditPopup();
+});
+
+// function fillEditPopup () {
+//   popupName.value = profileName.textContent;
+//   popupDescription.value = profileDescription.textContent;
+//   openPopup(editPopup);
+// }
 
 Promise.all([api.getUserInfo(), api.getInitialCards()])
 .then(([userData, cards]) => {
@@ -59,7 +89,7 @@ Promise.all([api.getUserInfo(), api.getInitialCards()])
   console.error(err);
 });
 
-
+// export { avatarPop, editPop, addPop, photoPop };
 
 
 

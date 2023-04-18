@@ -1,15 +1,14 @@
-import { deleteCard, toggleLike, handleCardClick, checkCardOwner } from './Card.js';
-import { cardTemplate, popupTitle, popupLink, elementsList, addPopup, popupAddForm, configObject, avatarPopup, popupAvatarForm, popupAvatarInput, profileAvatar } from "../index.js";
-import { closePopup } from "./Popup.js";
-import { updateAvatar, addCardToServer } from "./Api.js";
+import { cardTemplate, popupTitle, popupLink, elementsList, addPopup, popupAddForm, configObject, avatarPopup, popupAvatarForm, popupAvatarInput, profileAvatar } from "./consts.js";
+import { Popup } from "./Popup.js";
+import { api } from "./Api.js";
 
 function handleAddCardSubmit(evt) {
   evt.preventDefault();
   evt.submitter.value = 'Сохранение...';
   const title = popupTitle.value;
   const link = popupLink.value;
-  
-  addCardToServer(title, link)
+
+  api.addCardToServer(title, link)
     .then(data => {
       const addedCard = createCardElement(data);
       elementsList.insertBefore(addedCard, elementsList.firstChild);
@@ -31,7 +30,7 @@ function handleAvatarFormSubmit(evt) {
   evt.submitter.value = 'Сохранение...';
   const newAvatar = popupAvatarInput.value;
 
-  updateAvatar(newAvatar)
+  api.updateAvatar(newAvatar)
     .then((data) => {
       profileAvatar.src = data.avatar;
       closePopup(avatarPopup);
@@ -47,4 +46,4 @@ function handleAvatarFormSubmit(evt) {
     });
 }
 
-export {  handleAddCardSubmit, handleAvatarFormSubmit, };
+export {  handleAddCardSubmit, handleAvatarFormSubmit };

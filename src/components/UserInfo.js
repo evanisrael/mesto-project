@@ -34,3 +34,5 @@ function updateProfile(evt) {
       evt.submitter.value = 'Сохранить';
     });
 }
+
+export { updateProfile }
