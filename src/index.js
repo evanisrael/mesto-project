@@ -5,9 +5,21 @@ import { handleAddCardSubmit,
    handleAvatarFormSubmit } from "./components/utils";
 import { api } from './components/Api.js';
 import { Card } from './components/Card.js'
-import { profileName, profileDescription, profileAvatar, cardTemplate,
-   elementsList, avatarPopup, avatarEditButton, addPopup, addButton, editPopup,
-   } from './components/consts.js';
+import {
+  profileName,
+  profileDescription,
+  profileAvatar,
+  cardTemplate,
+  elementsList,
+  avatarPopup,
+  avatarEditButton,
+  addPopup,
+  addButton,
+  editPopup,
+  editButton,
+  popupName,
+  popupDescription, photoPopup
+} from './components/consts.js';
 import { PopupWithForm } from './components/PopupWithForm.js';
 import { PopupWithImage } from './components/PopupWithImage.js';
 import { updateProfile } from './components/UserInfo';
@@ -15,52 +27,48 @@ import { updateProfile } from './components/UserInfo';
 
 // let cards = null;
 
-
 // enableValidation(configObject);
-
-
-
-
-
 
 // popupEditForm.addEventListener('submit', updateProfile);
 // popupAddForm.addEventListener('submit', handleAddCardSubmit);
 // popupAvatarForm.addEventListener('submit', handleAvatarFormSubmit);
 
+////////////////////////////////////////////////////////////////////////
 const avatarPop = new PopupWithForm (
   avatarPopup, handleAvatarFormSubmit
 );
-const editPop = new PopupWithForm (
-  editPopup, updateProfile
-);
-const addPop = new PopupWithForm (
-  addPopup, handleAddCardSubmit
-);
-// const photoPop = new PopupWithImage (
-
-// );
-// const delPop = new Popup ();
-
+avatarPop.setEventListeners()
 avatarEditButton.addEventListener('click', (evt) => {
   evt.stopPropagation();
   avatarPop.openPopup();
 });
-
+////////////////////////////////////////////////////////////////////////
+const addPop = new PopupWithForm (
+  addPopup, handleAddCardSubmit
+);
 addButton.addEventListener('click', (evt) => {
   evt.stopPropagation();
   addPop.openPopup();
 });
 
+////////////////////////////////////////////////////////////////////////
+const editPop = new PopupWithForm (
+  editPopup, updateProfile
+);
 editButton.addEventListener('click', (evt) => {
   evt.stopPropagation();
-  fillEditPopup();
+  popupName.value = profileName.textContent;
+  popupDescription.value = profileDescription.textContent;
+  editPop.openPopup()
 });
+////////////////////////////////////////////////////////////////////////
 
-// function fillEditPopup () {
-//   popupName.value = profileName.textContent;
-//   popupDescription.value = profileDescription.textContent;
-//   openPopup(editPopup);
-// }
+
+
+
+// const delPop = new Popup ();
+////////////////////////////////////////////////////////////////////////
+
 
 Promise.all([api.getUserInfo(), api.getInitialCards()])
 .then(([userData, cards]) => {

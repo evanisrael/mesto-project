@@ -2,8 +2,10 @@ const closeButtons = document.querySelectorAll('.popup__close-button');
 
 class Popup {
 
-  constructor ({popup}) {
+  constructor (popup) {
+    // console.dir(popup)
     this.popup = popup;
+
   }
 
   openPopup() {
@@ -21,7 +23,8 @@ class Popup {
 
   _handleEscButton (evt) {
     if (evt.key === 'Escape') {
-      const popup = document.querySelector('.popup_opened'); // fix
+      // const popup = document.querySelector('.popup_opened'); // fix
+      console.dir(this)
       this.closePopup();
     }
   }
@@ -39,6 +42,7 @@ class Popup {
       const popup = button.closest('.popup');
       button.addEventListener('click', () => closePopup(popup));
     });
+
   }
 
 }

@@ -1,5 +1,6 @@
 import { api } from "./Api.js";
 import { photoPopupImage, photoPopupText, photoPopup } from './consts.js';
+import {PopupWithImage} from "./PopupWithImage";
 
 
 class Card {
@@ -60,17 +61,9 @@ class Card {
       cardTrashButton.style.visibility = 'hidden';
     }
   }
-  _handleCardClick(card) {
-      const cardTitle = card.querySelector('.element__title').textContent;
-      const cardImage = card.querySelector('.element__image').src;
-      photoPopupImage.src = cardImage;
-      photoPopupImage.alt = cardTitle;
-      photoPopupText.textContent = cardTitle;
-      openPopup(photoPopup);
-  }
-
   createCardElement() {
-    const cardElement = this.cardTemplate.content.cloneNode(true).querySelector('.element');
+    const cardElement
+      = this.cardTemplate.content.cloneNode(true).querySelector('.element');
     const cardTitle = cardElement.querySelector('.element__title');
     const cardImage = cardElement.querySelector('.element__image');
     const cardLikeButton = cardElement.querySelector('.element__button');
@@ -86,7 +79,10 @@ class Card {
     cardTrashButton.addEventListener('click', this.deleteCard);
     cardImage.addEventListener('click', (evt) => {
       evt.stopPropagation();
-      this._handleCardClick(cardElement);
+      const photoPop = new PopupWithImage (
+        photoPopup, cardElement
+      );
+      photoPop.openPopup()
     });
     this.checkCardOwner(this.owner._id, cardTrashButton);
     return cardElement;
