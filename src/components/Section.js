@@ -1,6 +1,3 @@
-
-
-
 class Section {
     constructor({items, renderer}, containerSelector) {
         this.items = items // массив данных, которые нужно добавить на страницу при инициализации класса
