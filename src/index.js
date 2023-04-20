@@ -21,8 +21,11 @@ import {
   popupDescription, photoPopup
 } from './components/consts.js';
 import { PopupWithForm } from './components/PopupWithForm.js';
-import { PopupWithImage } from './components/PopupWithImage.js';
 import { updateProfile } from './components/UserInfo';
+
+// TODO Перенести api в index.js + передавать его в объекты, где используется api
+// TODO Использовать объект Section
+// TODO Использовать объект UserInfo
 
 
 // let cards = null;
@@ -33,16 +36,17 @@ import { updateProfile } from './components/UserInfo';
 // popupAddForm.addEventListener('submit', handleAddCardSubmit);
 // popupAvatarForm.addEventListener('submit', handleAvatarFormSubmit);
 
-////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////
+// Правка аватара
 const avatarPop = new PopupWithForm (
   avatarPopup, handleAvatarFormSubmit
 );
-avatarPop.setEventListeners()
 avatarEditButton.addEventListener('click', (evt) => {
   evt.stopPropagation();
   avatarPop.openPopup();
 });
 ////////////////////////////////////////////////////////////////////////
+// Добавление места
 const addPop = new PopupWithForm (
   addPopup, handleAddCardSubmit
 );
@@ -50,8 +54,9 @@ addButton.addEventListener('click', (evt) => {
   evt.stopPropagation();
   addPop.openPopup();
 });
-
 ////////////////////////////////////////////////////////////////////////
+// Правка профайла
+
 const editPop = new PopupWithForm (
   editPopup, updateProfile
 );

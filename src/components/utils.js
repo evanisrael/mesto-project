@@ -1,5 +1,5 @@
-import { cardTemplate, popupTitle, popupLink, elementsList, addPopup, popupAddForm, configObject, avatarPopup, popupAvatarForm, popupAvatarInput, profileAvatar } from "./consts.js";
-import { Popup } from "./Popup.js";
+import { popupTitle, popupLink, elementsList, addPopup, popupAddForm, configObject,
+  avatarPopup, popupAvatarForm, popupAvatarInput, profileAvatar } from "./consts.js";
 import { api } from "./Api.js";
 
 function handleAddCardSubmit(evt) {

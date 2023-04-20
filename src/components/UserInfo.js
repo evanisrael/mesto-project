@@ -21,7 +21,7 @@ function updateProfile(evt) {
   const newName = popupName.value;
   const newAbout = popupDescription.value;
 
-  updateUserInfo(newName, newAbout)
+  api.updateUserInfo(newName, newAbout)
     .then((data) => {
       profileName.textContent = data.name;
       profileDescription.textContent = data.about;
