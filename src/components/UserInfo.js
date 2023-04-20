@@ -1,4 +1,5 @@
 import { api } from "./Api"
+import { profileName, profileDescription, profileAvatar } from "./consts"
 
 class UserInfo {
     constructor({name, description}) {
@@ -6,33 +7,36 @@ class UserInfo {
         this.description = description
     }
     getUserInfo() {
-        // api
 
-        return userData
+      return api.getUserInfo();
+
     }
-    setUserInfo({name, description}){
+    setUserInfo(evt){
         //  принимает новые данные пользователя, отправляет их на сервер и добавляет их на страницу.
+      evt.preventDefault();
+      evt.submitter.value = 'Сохранение...';
+      const newName = popupName.value;
+      const newAbout = popupDescription.value;
+
+      api.updateUserInfo(newName, newAbout)
+        .then((data) => {
+        profileName.textContent = data.name;
+        profileDescription.textContent = data.about;
+        this.closePopup();
+      })
+      .catch((err) => {
+      console.log(err);
+      })
+      .finally(() => {
+      evt.submitter.value = 'Сохранить';
+      });
+    }
+
+    renderUserInfo(userData) {
+      profileName.textContent = userData.name;
+      profileDescription.textContent = userData.about;
+      profileAvatar.src = userData.avatar;
     }
 }
 
-function updateProfile(evt) {
-  evt.preventDefault();
-  evt.submitter.value = 'Сохранение...';
-  const newName = popupName.value;
-  const newAbout = popupDescription.value;
-
-  api.updateUserInfo(newName, newAbout)
-    .then((data) => {
-      profileName.textContent = data.name;
-      profileDescription.textContent = data.about;
-      closePopup(editPopup);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      evt.submitter.value = 'Сохранить';
-    });
-}
-
-export { updateProfile }
+export { UserInfo }

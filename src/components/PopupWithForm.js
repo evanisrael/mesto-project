@@ -9,10 +9,10 @@ class PopupWithForm extends Popup {
     }
     openPopup() {
       super.openPopup();
-      this.popup.querySelector('.popup__form').addEventListener('submit', this.handlerFormSubmit)
+      this.popup.querySelector('.popup__form').addEventListener('submit', (evt) => this.handlerFormSubmit(evt))
     }
     closePopup() {
-      this.popup.querySelector('.popup__form').removeEventListener('submit', this.handlerFormSubmit)
+      this.popup.querySelector('.popup__form').removeEventListener('submit', (evt) => this.handlerFormSubmit(evt))
       super.closePopup();
     }
 

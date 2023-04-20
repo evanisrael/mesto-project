@@ -1,6 +1,9 @@
 import { popupTitle, popupLink, elementsList, addPopup, popupAddForm, configObject,
-  avatarPopup, popupAvatarForm, popupAvatarInput, profileAvatar } from "./consts.js";
+  avatarPopup, popupAvatarForm, popupAvatarInput, profileAvatar, cardTemplate, myId } from "./consts.js";
 import { api } from "./Api.js";
+import { Card } from "./Card.js"
+
+
 
 function handleAddCardSubmit(evt) {
   evt.preventDefault();
@@ -10,9 +13,12 @@ function handleAddCardSubmit(evt) {
 
   api.addCardToServer(title, link)
     .then(data => {
-      const addedCard = createCardElement(data);
+      const addedCard = new Card (
+        { name: data.name, link : data.link, likes: data.likes, owner: data.owner,
+          _id: data._id, cardTemplate, myId: myId.id }
+      ).createCardElement()
       elementsList.insertBefore(addedCard, elementsList.firstChild);
-      closePopup(addPopup);
+      this.closePopup();
       popupAddForm.reset();
       evt.submitter.disabled = true;
       evt.submitter.classList.add(configObject.inactiveButtonClass);
@@ -33,7 +39,7 @@ function handleAvatarFormSubmit(evt) {
   api.updateAvatar(newAvatar)
     .then((data) => {
       profileAvatar.src = data.avatar;
-      closePopup(avatarPopup);
+      this.closePopup();
       popupAvatarForm.reset();
       evt.submitter.disabled = true;
       evt.submitter.classList.add(configObject.inactiveButtonClass);
