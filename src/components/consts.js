@@ -16,14 +16,14 @@ export const popupTitle = document.querySelector('#popupTitle');
 export const popupLink = document.querySelector('#popupImageLink');
 export const profileName = content.querySelector('.profile__name');
 export const profileDescription = content.querySelector('.profile__description');
-export const closeButtons = document.querySelectorAll('.popup__close-button');
+export const closeButtonsSelector = '.popup__close-button';
 export const profileAvatar = document.querySelector(".profile__avatar");
 export const avatarEditButton = document.querySelector('.profile__edit-avatar-button');
 export const avatarPopup = document.querySelector('#avatar');
 export const popupAvatarForm = avatarPopup.querySelector('.popup__form');
 export const popupAvatarInput = popupAvatarForm.querySelector('.popup__input');
 export const configObject = {
-  formSelector: '.popup__form',
+  // formSelector: '.popup__form',
   inputSelector: '.popup__input',
   submitButtonSelector: '.popup__submit',
   inactiveButtonClass: 'popup__submit_inactive',

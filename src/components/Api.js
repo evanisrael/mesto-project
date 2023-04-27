@@ -1,8 +1,9 @@
+// Класс для работы с HTTP REST API
+
 class Api {
   constructor (options) {
     this.config = options
   }
-
 
   _request(url, options) {
     return fetch(url, options).then(this._checkResponse);
@@ -81,13 +82,5 @@ class Api {
   }
 }
 
-const api = new Api ({
-  baseUrl: 'https://nomoreparties.co/v1/plus-cohort-22',
-  headers: {
-    authorization: 'b9b8ff59-f5f7-49b0-80ac-8e59386cec27',
-    'Content-Type': 'application/json'
-  }
-})
-
-export { api }
+export default Api
 

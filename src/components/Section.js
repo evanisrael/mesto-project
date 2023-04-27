@@ -1,8 +1,7 @@
-import { UserInfo } from "./UserInfo"
-
+// Класс отрисовки блока
 
 class Section {
-    constructor(items, renderer, containerSelector, userData) {
+    constructor({items, renderer, containerSelector, userData}) {
         this.items = items // массив данных, которые нужно добавить на страницу при инициализации класса
         this.renderer = renderer // функция, которая отвечает за создание и отрисовку данных на странице.
         this.containerSelector = containerSelector // селектор контейнера, в который нужно добавлять созданные элементы.
@@ -11,19 +10,18 @@ class Section {
 
     renderItems() {
         // отвечает за отрисовку всех элементов
-        console.log(this.userData._id)
         this.items.forEach(item => {
-          this.addItem(this.renderer(item, this.userData._id))
+          this._addItem(this.renderer(item, this.userData._id))
         })
     }
 
-    addItem(item) {
+    _addItem(item) {
          // принимает DOM-элемент и добавляет его в контейнер.
         this.containerSelector.append(item)
     }
 }
 
-export { Section }
+export default Section
 
 
 

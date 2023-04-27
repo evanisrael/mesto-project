@@ -1,15 +1,13 @@
-const closeButtons = document.querySelectorAll('.popup__close-button');
+// Базовый класс попапа
+import {closeButtonsSelector} from './consts'
 
 class Popup {
-
   constructor (popup) {
-    // console.dir(popup)
     this.popup = popup;
-    this.closeButton = this.popup.querySelector('.popup__close-button')
+    this.closeButton = this.popup.querySelector(closeButtonsSelector)
   }
 
   openPopup() {
-    // console.log(this.popup.classList);
     this.popup.classList.add('popup_opened');
     document.addEventListener('keydown', (evt) => this._handleEscButton(evt));
     this.popup.addEventListener('click', (evt) => this._handleOutsideClick(evt));
@@ -25,8 +23,6 @@ class Popup {
 
   _handleEscButton (evt) {
     if (evt.key === 'Escape') {
-      // const popup = document.querySelector('.popup_opened'); // fix
-      console.dir(this)
       this.closePopup();
     }
   }
@@ -38,18 +34,9 @@ class Popup {
     }
   }
 
-  // setEventListeners() {
-    //добавляет слушатель клика иконке закрытия попапа. Модальное окно также закрывается при клике на затемнённую область вокруг формы.
-    // closeButtons.forEach((button) => {
-    //   const popup = button.closest('.popup');
-    //   button.addEventListener('click', () => closePopup(popup));
-    // });
-  // }
-
 }
 
-
-export { Popup };
+export default Popup;
 
 
 

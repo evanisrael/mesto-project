@@ -1,25 +1,22 @@
-import { api } from "./Api.js";
-import { photoPopupImage, photoPopupText, photoPopup } from './consts.js';
-import {PopupWithImage} from "./PopupWithImage";
-
+// Класс карточки
 
 class Card {
-  constructor({ name, link, likes, owner, _id, cardTemplate, myId }) {
-    this.name = name;
-    this.link = link;
-    this.likes = likes;
+  constructor({ name, link, likes, owner, _id, cardTemplate, myId, api, photoPopup }) {
+    this._name = name;
+    this._link = link;
+    this._likes = likes;
     this.owner = owner;
     this._id = _id;
     this.cardTemplate = cardTemplate;
-    this.myId = myId;
+    this._myId = myId;
+    this.api = api
+    this.photoPopup = photoPopup
   }
 
-
-  deleteCard(evt) {
+  deleteCard = (evt) => {
     if (evt.target.classList.contains('element__trash-button')) {
       const card = evt.target.closest('.element');
-      const cardId = card.dataset.cardId;
-      api.deleteSelectedCard(cardId)
+      this.api.deleteSelectedCard(this._id)
         .then(() => {
           card.remove();
         })
@@ -27,15 +24,14 @@ class Card {
     }
   }
 
-  toggleLike(evt) {
+  toggleLike = (evt) => {
     const likeButton = evt.target;
     if (likeButton.classList.contains('element__button')) {
       const card = likeButton.closest('.element');
-      const cardId = card.dataset.cardId;
       const isLiked = likeButton.classList.contains('element__button_active');
 
       if (isLiked) {
-        api.removeLike(cardId)
+        this.api.removeLike(this._id)
           .then(updatedCard => {
             likeButton.classList.remove('element__button_active');
             const likesNumber = updatedCard.likes.length;
@@ -43,7 +39,8 @@ class Card {
           })
           .catch(error => console.error(error));
       } else {
-        api.addLike(cardId)
+        console.log(this)
+        this.api.addLike(this._id)
           .then(updatedCard => {
             likeButton.classList.add('element__button_active');
             const likesNumber = updatedCard.likes.length;
@@ -55,38 +52,36 @@ class Card {
   }
 
   checkCardOwner(ownerId, cardTrashButton) {
-    if (ownerId === this.myId) {
+    if (ownerId === this._myId) {
       cardTrashButton.style.visibility = 'visible';
     } else {
       cardTrashButton.style.visibility = 'hidden';
     }
   }
+
   createCardElement() {
-    const cardElement
-      = this.cardTemplate.content.cloneNode(true).querySelector('.element');
+    const cardElement = this.cardTemplate.content.cloneNode(true).querySelector('.element');
     const cardTitle = cardElement.querySelector('.element__title');
     const cardImage = cardElement.querySelector('.element__image');
     const cardLikeButton = cardElement.querySelector('.element__button');
     const cardTrashButton = cardElement.querySelector('.element__trash-button');
     const cardLikeNumber = cardElement.querySelector('.element__like-number');
-    cardElement.dataset.cardId = this._id;
-    cardElement.dataset.cardObject = JSON.stringify({ name: this.name, link: this.link, likes: this.likes, owner: this.owner, _id: this._id });
-    cardTitle.textContent = this.name;
-    cardImage.src = this.link;
-    cardImage.alt = this.name;
-    cardLikeNumber.textContent = this.likes.length;
+    this._likes.forEach(elem => { // Поиск своих лайков
+      if(elem._id === this._myId) {  cardLikeButton.classList.add('element__button_active') }
+    })
+    cardTitle.textContent = this._name;
+    cardImage.src = this._link;
+    cardImage.alt = this._name;
+    cardLikeNumber.textContent = this._likes.length;
     cardLikeButton.addEventListener('click', this.toggleLike);
     cardTrashButton.addEventListener('click', this.deleteCard);
     cardImage.addEventListener('click', (evt) => {
       evt.stopPropagation();
-      const photoPop = new PopupWithImage (
-        photoPopup, cardElement
-      );
-      photoPop.openPopup()
+      this.photoPopup.openPopup(cardElement)
     });
     this.checkCardOwner(this.owner._id, cardTrashButton);
     return cardElement;
   }
 }
 
-export { Card };
+export default Card;
