@@ -48,33 +48,33 @@ class Api {
     });
   }
 
-   getInitialCards() {
+  getInitialCards() {
     return this._request(`${this.config.baseUrl}/cards`, {
       headers: this.config.headers,
     });
   };
 
-   getUserInfo() {
+  getUserInfo() {
     return this._request(`${this.config.baseUrl}/users/me`, {
       headers: this.config.headers,
     });
   };
 
-   deleteSelectedCard(cardId) {
+  deleteSelectedCard(cardId) {
     return this._request(`${this.config.baseUrl}/cards/${cardId}`, {
       method: 'DELETE',
       headers: this.config.headers,
     });
   };
 
-   addLike(cardId) {
+  addLike(cardId) {
     return this._request(`${this.config.baseUrl}/cards/likes/${cardId}`, {
       method: 'PUT',
       headers: this.config.headers,
     });
   }
 
-   removeLike(cardId) {
+  removeLike(cardId) {
     return this._request(`${this.config.baseUrl}/cards/likes/${cardId}`, {
       method: 'DELETE',
       headers: this.config.headers,

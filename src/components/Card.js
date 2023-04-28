@@ -5,18 +5,18 @@ class Card {
     this._name = name;
     this._link = link;
     this._likes = likes;
-    this.owner = owner;
+    this._owner = owner;
     this._id = _id;
-    this.cardTemplate = cardTemplate;
+    this._cardTemplate = cardTemplate;
     this._myId = myId;
-    this.api = api
-    this.photoPopup = photoPopup
+    this._api = api
+    this._photoPopup = photoPopup
   }
 
-  deleteCard = (evt) => {
+  _deleteCard = (evt) => {
     if (evt.target.classList.contains('element__trash-button')) {
       const card = evt.target.closest('.element');
-      this.api.deleteSelectedCard(this._id)
+      this._api.deleteSelectedCard(this._id)
         .then(() => {
           card.remove();
         })
@@ -24,14 +24,14 @@ class Card {
     }
   }
 
-  toggleLike = (evt) => {
+  _toggleLike = (evt) => {
     const likeButton = evt.target;
     if (likeButton.classList.contains('element__button')) {
       const card = likeButton.closest('.element');
       const isLiked = likeButton.classList.contains('element__button_active');
 
       if (isLiked) {
-        this.api.removeLike(this._id)
+        this._api.removeLike(this._id)
           .then(updatedCard => {
             likeButton.classList.remove('element__button_active');
             const likesNumber = updatedCard.likes.length;
@@ -40,7 +40,7 @@ class Card {
           .catch(error => console.error(error));
       } else {
         console.log(this)
-        this.api.addLike(this._id)
+        this._api.addLike(this._id)
           .then(updatedCard => {
             likeButton.classList.add('element__button_active');
             const likesNumber = updatedCard.likes.length;
@@ -51,7 +51,7 @@ class Card {
     }
   }
 
-  checkCardOwner(ownerId, cardTrashButton) {
+  _checkCardOwner(ownerId, cardTrashButton) {
     if (ownerId === this._myId) {
       cardTrashButton.style.visibility = 'visible';
     } else {
@@ -60,7 +60,7 @@ class Card {
   }
 
   createCardElement() {
-    const cardElement = this.cardTemplate.content.cloneNode(true).querySelector('.element');
+    const cardElement = this._cardTemplate.content.cloneNode(true).querySelector('.element');
     const cardTitle = cardElement.querySelector('.element__title');
     const cardImage = cardElement.querySelector('.element__image');
     const cardLikeButton = cardElement.querySelector('.element__button');
@@ -73,13 +73,13 @@ class Card {
     cardImage.src = this._link;
     cardImage.alt = this._name;
     cardLikeNumber.textContent = this._likes.length;
-    cardLikeButton.addEventListener('click', this.toggleLike);
-    cardTrashButton.addEventListener('click', this.deleteCard);
+    cardLikeButton.addEventListener('click', this._toggleLike);
+    cardTrashButton.addEventListener('click', this._deleteCard);
     cardImage.addEventListener('click', (evt) => {
       evt.stopPropagation();
-      this.photoPopup.openPopup(cardElement)
+      this._photoPopup.openPopup(cardElement)
     });
-    this.checkCardOwner(this.owner._id, cardTrashButton);
+    this._checkCardOwner(this._owner._id, cardTrashButton);
     return cardElement;
   }
 }

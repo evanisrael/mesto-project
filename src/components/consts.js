@@ -23,7 +23,6 @@ export const avatarPopup = document.querySelector('#avatar');
 export const popupAvatarForm = avatarPopup.querySelector('.popup__form');
 export const popupAvatarInput = popupAvatarForm.querySelector('.popup__input');
 export const configObject = {
-  // formSelector: '.popup__form',
   inputSelector: '.popup__input',
   submitButtonSelector: '.popup__submit',
   inactiveButtonClass: 'popup__submit_inactive',
