@@ -27,6 +27,10 @@ class FormValidator {
     })
     this._formElement.addEventListener('reset', () => {
       this._toggleButtonState(this._inputList, this._submitElement)
+      this._inputList.forEach((inputElement) => {
+        const errorElement = this._formElement.querySelector(`.${inputElement.id}-input-error`);
+        this._hideInputError(inputElement, errorElement)
+      })
     })
 
   };

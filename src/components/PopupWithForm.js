@@ -14,7 +14,9 @@ class PopupWithForm extends Popup {
       this.popup.querySelector('.popup__form').addEventListener('submit', (evt) => this.handlerFormSubmit(evt))
     }
     closePopup() {
-      this.popup.querySelector('.popup__form').removeEventListener('submit', (evt) => this.handlerFormSubmit(evt))
+      const popupForm = this.popup.querySelector('.popup__form');
+      popupForm.reset();
+      popupForm.removeEventListener('submit', (evt) => this.handlerFormSubmit(evt))
       super.closePopup();
     }
 
