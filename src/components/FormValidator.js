@@ -13,9 +13,9 @@ class FormValidator {
 
   enableValidation = () => {
     this._submitElement = this._formElement.querySelector(this._submitButtonSelector)
-    console.log(this._submitBtn)
+    // console.log(this._submitBtn)
     this._inputList = Array.from(this._formElement.querySelectorAll(this._inputSelector))
-    console.log(this._inputList)
+    // console.log(this._inputList)
     // Валидация полей
     this._inputList.forEach((inputElement) => {
       inputElement.addEventListener('input', () => { this._checkInputValidity(inputElement) })
