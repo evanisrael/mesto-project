@@ -15,39 +15,29 @@ class Card {
 
   _deleteCard = (evt) => {
     if (evt.target.classList.contains('element__trash-button')) {
-      const card = evt.target.closest('.element');
       this._api.deleteSelectedCard(this._id)
         .then(() => {
-          card.remove();
+          this._cardElement.remove();
         })
         .catch(error => console.error(error));
     }
   }
 
-  _toggleLike = (evt) => {
-    const likeButton = evt.target;
-    if (likeButton.classList.contains('element__button')) {
-      const card = likeButton.closest('.element');
-      const isLiked = likeButton.classList.contains('element__button_active');
-
-      if (isLiked) {
-        this._api.removeLike(this._id)
-          .then(updatedCard => {
-            likeButton.classList.remove('element__button_active');
-            const likesNumber = updatedCard.likes.length;
-            card.querySelector('.element__like-number').textContent = likesNumber;
-          })
-          .catch(error => console.error(error));
-      } else {
-        console.log(this)
-        this._api.addLike(this._id)
-          .then(updatedCard => {
-            likeButton.classList.add('element__button_active');
-            const likesNumber = updatedCard.likes.length;
-            card.querySelector('.element__like-number').textContent = likesNumber;
-          })
-          .catch(error => console.error(error));
-      }
+  _toggleLike = () => {
+    if (this._cardLikeButton.classList.contains('element__button_active')) {
+      this._api.removeLike(this._id)
+        .then(updatedCard => {
+          this._cardLikeButton.classList.remove('element__button_active');
+          this._cardLikeNumber.textContent = updatedCard.likes.length;
+        })
+        .catch(error => console.error(error));
+    } else {
+      this._api.addLike(this._id)
+        .then(updatedCard => {
+          this._cardLikeButton.classList.add('element__button_active');
+          this._cardLikeNumber.textContent = updatedCard.likes.length;
+        })
+        .catch(error => console.error(error));
     }
   }
 
@@ -60,27 +50,27 @@ class Card {
   }
 
   createCardElement() {
-    const cardElement = this._cardTemplate.content.cloneNode(true).querySelector('.element');
-    const cardTitle = cardElement.querySelector('.element__title');
-    const cardImage = cardElement.querySelector('.element__image');
-    const cardLikeButton = cardElement.querySelector('.element__button');
-    const cardTrashButton = cardElement.querySelector('.element__trash-button');
-    const cardLikeNumber = cardElement.querySelector('.element__like-number');
+    this._cardElement = this._cardTemplate.content.cloneNode(true).querySelector('.element');
+    this._cardLikeButton = this._cardElement.querySelector('.element__button');
+    this._cardLikeNumber = this._cardElement.querySelector('.element__like-number');
+    const cardTitle = this._cardElement.querySelector('.element__title');
+    const cardImage = this._cardElement.querySelector('.element__image');
+    const cardTrashButton = this._cardElement.querySelector('.element__trash-button');
     this._likes.forEach(elem => { // Поиск своих лайков
-      if(elem._id === this._myId) {  cardLikeButton.classList.add('element__button_active') }
+      if(elem._id === this._myId) {  this._cardLikeButton.classList.add('element__button_active') }
     })
     cardTitle.textContent = this._name;
     cardImage.src = this._link;
     cardImage.alt = this._name;
-    cardLikeNumber.textContent = this._likes.length;
-    cardLikeButton.addEventListener('click', this._toggleLike);
+    this._cardLikeNumber.textContent = this._likes.length;
+    this._cardLikeButton.addEventListener('click', this._toggleLike);
     cardTrashButton.addEventListener('click', this._deleteCard);
     cardImage.addEventListener('click', (evt) => {
       evt.stopPropagation();
-      this._photoPopup.openPopup(cardElement)
+      this._photoPopup.openPopup(this._cardElement)
     });
     this._checkCardOwner(this._owner._id, cardTrashButton);
-    return cardElement;
+    return this._cardElement;
   }
 }
 

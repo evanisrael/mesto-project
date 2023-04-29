@@ -1,24 +1,26 @@
 // Базовый класс попапа
-import {closeButtonsSelector} from './consts'
 
 class Popup {
-  constructor (popup) {
+  constructor ({popup, closeButtonsSelector}) {
     this.popup = popup;
     this.closeButton = this.popup.querySelector(closeButtonsSelector)
+    this._handleEscButton = this._handleEscButton.bind(this)
+    this._handleOutsideClick = this._handleOutsideClick.bind(this)
+    this.closePopup = this.closePopup.bind(this)
   }
 
   openPopup() {
     this.popup.classList.add('popup_opened');
-    document.addEventListener('keydown', (evt) => this._handleEscButton(evt));
-    this.popup.addEventListener('click', (evt) => this._handleOutsideClick(evt));
-    this.closeButton.addEventListener('click', () => this.closePopup())
+    document.addEventListener('keydown', this._handleEscButton);
+    this.popup.addEventListener('click', this._handleOutsideClick);
+    this.closeButton.addEventListener('click',  this.closePopup)
   }
 
   closePopup() {
     this.popup.classList.remove('popup_opened');
-    document.removeEventListener('keydown', (evt) => this._handleEscButton(evt));
-    this.popup.removeEventListener('click', (evt) => this._handleOutsideClick(evt));
-    this.closeButton.removeEventListener('click', () => this.closePopup())
+    document.removeEventListener('keydown', this._handleEscButton);
+    this.popup.removeEventListener('click', this._handleOutsideClick);
+    this.closeButton.removeEventListener('click', this.closePopup)
   }
 
   _handleEscButton (evt) {
@@ -28,8 +30,7 @@ class Popup {
   }
 
   _handleOutsideClick(evt) {
-    const openedPopup = document.querySelector('.popup_opened');
-    if (openedPopup && !evt.target.closest('.popup__container') && !evt.target.closest('.popup__image-container')) {
+    if (!evt.target.closest('.popup__container') && !evt.target.closest('.popup__image-container')) {
       this.closePopup();
     }
   }

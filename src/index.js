@@ -19,8 +19,12 @@ import {
   configObject,
   popupAvatarForm,
   popupAvatarInput,
-  photoPopup, popupEditForm,
-} from './components/consts.js';
+  photoPopup,
+  popupEditForm,
+  closeButtonsSelector,
+  photoPopupImage,
+  photoPopupText,
+} from './utils/consts.js';
 
 import FormValidator from "./components/FormValidator.js";
 import Card from './components/Card.js'
@@ -37,7 +41,6 @@ const api = new Api ({
 })
 //-------------------------------------------------------------
 let myId = null
-
 //-------------------------------------------------------------
 function handleAddCardSubmit(evt) {
   // Обработка сохранения новой карточки
@@ -48,15 +51,9 @@ function handleAddCardSubmit(evt) {
 
   api.addCardToServer(title, link)
     .then(data => {
-      const addedCard = new Card (
-        { name: data.name, link : data.link, likes: data.likes, owner: data.owner,
-          _id: data._id, cardTemplate, myId: myId }
-      ).createCardElement()
-      elementsList.insertBefore(addedCard, elementsList.firstChild);
+      this.section.prependItem(createCardItem(data, myId))
       this.closePopup();
       popupAddForm.reset();
-      evt.submitter.disabled = true;
-      evt.submitter.classList.add(configObject.inactiveButtonClass);
     })
     .catch(err => {
       console.log(err);
@@ -64,7 +61,7 @@ function handleAddCardSubmit(evt) {
     .finally(() => {
       evt.submitter.value = 'Сохранить';
     });
-};
+}
 //-------------------------------------------------------------
 function handleAvatarFormSubmit(evt) {
   // Обработка сохранения нового аватара
@@ -76,8 +73,6 @@ function handleAvatarFormSubmit(evt) {
       profileAvatar.src = data.avatar;
       this.closePopup();
       popupAvatarForm.reset();
-      evt.submitter.disabled = true;
-      evt.submitter.classList.add(configObject.inactiveButtonClass);
     })
     .catch((err) => {
       console.error(err);
@@ -106,9 +101,23 @@ function handleSetUserInfo(evt) {
   evt.submitter.value = 'Сохранить';
   });
 }
+
+const createCardItem = function createCardItem(cardItem, myId) {
+  //
+  const card = new Card ({name: cardItem.name, link: cardItem.link,
+    likes: cardItem.likes, owner: cardItem.owner, _id: cardItem._id,
+    cardTemplate: cardTemplate, myId: myId, api: api, photoPopup: photoPop});
+    return card.createCardElement();
+}
+
+const section = new Section({
+  renderer: createCardItem,
+  container: elementsList
+})
+
 //////////////////////////////////////////////////////////////////////
 // Правка аватара
-const avatarPop = new PopupWithForm (avatarPopup, handleAvatarFormSubmit);
+const avatarPop = new PopupWithForm ({popup:avatarPopup, handlerFormSubmit:handleAvatarFormSubmit, closeButtonsSelector: closeButtonsSelector});
 new FormValidator({configObject: configObject, formElement: popupAvatarForm}).enableValidation()
 avatarEditButton.addEventListener('click', (evt) => {
   evt.stopPropagation();
@@ -116,7 +125,7 @@ avatarEditButton.addEventListener('click', (evt) => {
 });
 ////////////////////////////////////////////////////////////////////////
 // Добавление места
-const addPop = new PopupWithForm (addPopup, handleAddCardSubmit);
+const addPop = new PopupWithForm ({popup:addPopup, handlerFormSubmit:handleAddCardSubmit, section:section, closeButtonsSelector: closeButtonsSelector});
 new FormValidator({configObject: configObject, formElement: popupAddForm}).enableValidation()
 addButton.addEventListener('click', (evt) => {
   evt.stopPropagation();
@@ -124,8 +133,8 @@ addButton.addEventListener('click', (evt) => {
 });
 ////////////////////////////////////////////////////////////////////////
 // Правка профайла
-const userInfo = new UserInfo({api: api});
-const editPop = new PopupWithForm(editPopup, handleSetUserInfo);
+const userInfo = new UserInfo({api: api, profileName:profileName, profileDescription:profileDescription, profileAvatar:profileAvatar});
+const editPop = new PopupWithForm({popup:editPopup, handlerFormSubmit:handleSetUserInfo, closeButtonsSelector:closeButtonsSelector});
 new FormValidator({configObject: configObject, formElement: popupEditForm}).enableValidation()
 editButton.addEventListener('click', (evt) => {
   evt.stopPropagation();
@@ -135,31 +144,23 @@ editButton.addEventListener('click', (evt) => {
 });
 ////////////////////////////////////////////////////////////////////////
 // Просмотр изображений
-const photoPop = new PopupWithImage(photoPopup)
+const photoPop = new PopupWithImage(
+  { popup:photoPopup,
+    closeButtonsSelector: closeButtonsSelector,
+    photoPopupImage:photoPopupImage,
+    photoPopupText:photoPopupText
+  })
 ////////////////////////////////////////////////////////////////////////
 // Подтверждение удаления карточки
 // const delPop = new Popup ();
 ////////////////////////////////////////////////////////////////////////
-
-function createCardItem(cardItem, myId) {
-  //
-  const card = new Card ({name: cardItem.name, link: cardItem.link,
-    likes: cardItem.likes, owner: cardItem.owner, _id: cardItem._id,
-    cardTemplate: cardTemplate, myId: myId, api: api, photoPopup: photoPop});
-    return card.createCardElement();
-}
 
 // Первичное заполнение
 Promise.all([userInfo.getUserInfo(), api.getInitialCards()])
 .then(([userData, cards]) => {
   myId = userData._id;
   userInfo.renderUserInfo(userData)
-  new Section({
-    items: cards,
-    renderer: createCardItem,
-    containerSelector: elementsList,
-    userData: userData
-  }).renderItems()
+  section.renderItems({items: cards, userData: userData})
 })
 .catch(err => {
   console.error(err);

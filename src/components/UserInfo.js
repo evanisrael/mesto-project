@@ -1,18 +1,19 @@
 // Класс информации о пользователе
 
-import { profileName, profileDescription, profileAvatar } from "./consts"
-
 class UserInfo {
-  constructor({api}) {
+  constructor({api, profileName, profileDescription, profileAvatar}) {
     this.api = api
+    this._profileName = profileName
+    this._profileDescription = profileDescription
+    this._profileAvatar = profileAvatar
   }
   getUserInfo = () => {
     return this.api.getUserInfo();
   }
   renderUserInfo(userData) {
-    profileName.textContent = userData.name;
-    profileDescription.textContent = userData.about;
-    profileAvatar.src = userData.avatar;
+    this._profileName.textContent = userData.name;
+    this._profileDescription.textContent = userData.about;
+    this._profileAvatar.src = userData.avatar;
   }
 }
 
