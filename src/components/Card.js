@@ -57,7 +57,7 @@ class Card {
     const cardImage = this._cardElement.querySelector('.element__image');
     const cardTrashButton = this._cardElement.querySelector('.element__trash-button');
     this._likes.forEach(elem => { // Поиск своих лайков
-      if(elem._id === this._myId) {  this._cardLikeButton.classList.add('element__button_active') }
+      if(elem._id === this._myId) {this._cardLikeButton.classList.add('element__button_active')}
     })
     cardTitle.textContent = this._name;
     cardImage.src = this._link;
@@ -67,7 +67,7 @@ class Card {
     cardTrashButton.addEventListener('click', this._deleteCard);
     cardImage.addEventListener('click', (evt) => {
       evt.stopPropagation();
-      this._photoPopup.openPopup(this._cardElement)
+      this._photoPopup.open({cardTitle: this._name, cardImage: this._link})
     });
     this._checkCardOwner(this._owner._id, cardTrashButton);
     return this._cardElement;

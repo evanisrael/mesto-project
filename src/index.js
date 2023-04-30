@@ -11,17 +11,11 @@ import {
   addButton,
   editPopup,
   editButton,
-  popupName,
-  popupDescription,
-  popupTitle,
-  popupLink,
   popupAddForm,
   configObject,
   popupAvatarForm,
-  popupAvatarInput,
   photoPopup,
   popupEditForm,
-  closeButtonsSelector,
   photoPopupImage,
   photoPopupText,
 } from './utils/consts.js';
@@ -40,72 +34,59 @@ const api = new Api ({
   headers: apiConfig.headers
 })
 //-------------------------------------------------------------
-let myId = null
+
+function handleSubmit(evt, request, popupInstance, loadingText = "Сохранение...") {
+  // Базовый обработчик сабмита
+  evt.preventDefault();
+  popupInstance.renderLoading(true, loadingText);
+  request()
+    .then(() => {
+      popupInstance.close()
+    })
+    .catch((err) => {
+      console.error(`Ошибка: ${err}`);
+    })
+    .finally(() => {
+      popupInstance.renderLoading(false);
+    });
+}
 //-------------------------------------------------------------
 function handleAddCardSubmit(evt) {
-  // Обработка сохранения новой карточки
-  console.log(evt)
-  const dataPop = addPop.getInputValues()
-  evt.preventDefault();
-  evt.submitter.value = 'Сохранение...';
-  // const title = popupTitle.value;
-  // const link = popupLink.value;
-
-  // api.addCardToServer(dataPop.title, dataPop.link)
-  //   .then(data => {
-  //     section.prependItem(createCardItem(data, myId))
-  //     addPop.closePopup();
-  //   })
-  //   .catch(err => {
-  //     console.log(err);
-  //   })
-  //   .finally(() => {
-  //     evt.submitter.value = 'Сохранить';
-  //   });
+   // Обработка сохранения новой карточки
+  const inputs = addPop.getInputValues()
+  function makeRequest(){
+    return api.addCardToServer({title:inputs.title, link:inputs.ImageLink})
+      .then(data => {section.prependItem(createCardItem(data))})
+  }
+  handleSubmit(evt, makeRequest, addPop)
 }
 //-------------------------------------------------------------
 function handleAvatarFormSubmit(evt) {
   // Обработка сохранения нового аватара
-  evt.preventDefault();
-  evt.submitter.value = 'Сохранение...';
-  const newAvatar = popupAvatarInput.value;
-  api.updateAvatar(newAvatar)
-    .then((data) => {
-      profileAvatar.src = data.avatar;
-      avatarPop.closePopup();
-    })
-    .catch((err) => {
-      console.error(err);
-    })
-    .finally(() => {
-      evt.submitter.value = 'Сохранить';
-    });
+  function makeRequest(){
+    return api.updateAvatar({newAvatar: avatarPop.getInputValues().avatar})
+      .then(data => {userInfo.setAvatar({avatar: data.avatar})})
+  }
+  handleSubmit(evt, makeRequest, avatarPop)
 }
 //-------------------------------------------------------------
 function handleSetUserInfo(evt) {
   //  Обработка сохранения новых данных пользователя
-  evt.preventDefault();
-  evt.submitter.value = 'Сохранение...';
-  const newName = popupName.value;
-  const newAbout = popupDescription.value;
-  api.updateUserInfo(newName, newAbout)
-    .then((data) => {
-    userInfo.setUserInfo(data);
-    editPop.closePopup();
-  })
-  .catch((err) => {
-    console.log(err);
-  })
-  .finally(() => {
-  evt.submitter.value = 'Сохранить';
-  });
+  const dataEditPop = editPop.getInputValues()
+  function makeRequest() {
+    return api.updateUserInfo({name: dataEditPop.name, about: dataEditPop.description})
+      .then(data => {
+        userInfo.setUserInfo(data)
+      })
+  }
+  handleSubmit(evt, makeRequest, editPop)
 }
-
-const createCardItem = function createCardItem(cardItem, myId) {
-  //
+//-------------------------------------------------------------
+const createCardItem = function createCardItem(cardItem) {
+  // создание новой карточки
   const card = new Card ({name: cardItem.name, link: cardItem.link,
     likes: cardItem.likes, owner: cardItem.owner, _id: cardItem._id,
-    cardTemplate: cardTemplate, myId: myId, api: api, photoPopup: photoPop});
+    cardTemplate: cardTemplate, myId: userInfo.getUserInfo().userId, api: api, photoPopup: photoPop});
     return card.createCardElement();
 }
 
@@ -116,43 +97,34 @@ const section = new Section({
 
 //////////////////////////////////////////////////////////////////////
 // Правка аватара
-const avatarPop = new PopupWithForm ({popup:avatarPopup, handlerFormSubmit:handleAvatarFormSubmit, closeButtonsSelector: closeButtonsSelector});
+const avatarPop = new PopupWithForm ({popup:avatarPopup, handlerFormSubmit:handleAvatarFormSubmit});
 new FormValidator({configObject: configObject, formElement: popupAvatarForm}).enableValidation()
 avatarEditButton.addEventListener('click', (evt) => {
   evt.stopPropagation();
-  avatarPop.openPopup();
+  avatarPop.open();
 });
 ////////////////////////////////////////////////////////////////////////
 // Добавление места
-const addPop = new PopupWithForm ({popup:addPopup, handlerFormSubmit:handleAddCardSubmit, closeButtonsSelector: closeButtonsSelector});
+const addPop = new PopupWithForm ({popup:addPopup, handlerFormSubmit:handleAddCardSubmit });
 new FormValidator({configObject: configObject, formElement: popupAddForm}).enableValidation()
 addButton.addEventListener('click', (evt) => {
   evt.stopPropagation();
-  addPop.openPopup();
+  addPop.open();
 });
 ////////////////////////////////////////////////////////////////////////
 // Правка профайла
 const userInfo = new UserInfo({profileName:profileName, profileDescription:profileDescription, profileAvatar:profileAvatar});
-const editPop = new PopupWithForm({popup:editPopup, handlerFormSubmit:handleSetUserInfo, closeButtonsSelector:closeButtonsSelector});
+const editPop = new PopupWithForm({popup:editPopup, handlerFormSubmit:handleSetUserInfo});
 new FormValidator({configObject: configObject, formElement: popupEditForm}).enableValidation()
 editButton.addEventListener('click', (evt) => {
   evt.stopPropagation();
-  // popupName.value = profileName.textContent;
-  // popupDescription.value = profileDescription.textContent;
   const { name, about } = userInfo.getUserInfo();
-  popupName.value = name;
-  popupDescription.value = about;
-
-  editPop.openPopup()
+  editPop.setInputValues({name: name, description: about})
+  editPop.open()
 });
 ////////////////////////////////////////////////////////////////////////
 // Просмотр изображений
-const photoPop = new PopupWithImage(
-  { popup:photoPopup,
-    closeButtonsSelector: closeButtonsSelector,
-    photoPopupImage:photoPopupImage,
-    photoPopupText:photoPopupText
-  })
+const photoPop = new PopupWithImage({ popup:photoPopup, photoPopupImage:photoPopupImage, photoPopupText:photoPopupText})
 ////////////////////////////////////////////////////////////////////////
 // Подтверждение удаления карточки
 // const delPop = new Popup ();
@@ -161,8 +133,7 @@ const photoPop = new PopupWithImage(
 // Первичное заполнение
 Promise.all([api.getUserInfo(), api.getInitialCards()])
 .then(([userData, cards]) => {
-  myId = userData._id;
-  userInfo.setUserInfo({name: userData.name, about: userData.about, avatar: userData.avatar, _id: userData._id}) ////////////////////////////// TODO деструктуризация
+  userInfo.setUserInfo(userData)
   section.renderItems({items: cards, userData: userData})
 })
 .catch(err => {

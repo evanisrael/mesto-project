@@ -16,7 +16,7 @@ class Api {
     return Promise.reject(`Ошибка: ${res.status}`);
   }
 
-  updateUserInfo (name, about) {
+  updateUserInfo ({name, about}) {
     return this._request(`${this.config.baseUrl}/users/me`, {
       method: 'PATCH',
       headers: this.config.headers,
@@ -27,7 +27,7 @@ class Api {
     });
   }
 
-  updateAvatar (newAvatar) {
+  updateAvatar ({newAvatar}) {
     return this._request(`${this.config.baseUrl}/users/me/avatar`, {
       method: 'PATCH',
       headers: this.config.headers,
@@ -37,7 +37,7 @@ class Api {
     });
   }
 
-  addCardToServer (title, link) {
+  addCardToServer ({title, link}) {
     return this._request(`${this.config.baseUrl}/cards`, {
       method: 'POST',
       headers: this.config.headers,
