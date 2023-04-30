@@ -1,9 +1,9 @@
 // Базовый класс попапа
 
 class Popup {
-  constructor ({popup, closeButtonsSelector}) {
+  constructor ({popup}) {
     this.popup = popup;
-    this.closeButton = this.popup.querySelector(closeButtonsSelector)
+    this.closeButton = this.popup.querySelector('.popup__close-button')
     this._handleEscButton = this._handleEscButton.bind(this)
     this._handleOutsideClick = this._handleOutsideClick.bind(this)
     this.closePopup = this.closePopup.bind(this)

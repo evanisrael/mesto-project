@@ -44,23 +44,24 @@ let myId = null
 //-------------------------------------------------------------
 function handleAddCardSubmit(evt) {
   // Обработка сохранения новой карточки
+  console.log(evt)
+  const dataPop = addPop.getInputValues()
   evt.preventDefault();
   evt.submitter.value = 'Сохранение...';
-  const title = popupTitle.value;
-  const link = popupLink.value;
+  // const title = popupTitle.value;
+  // const link = popupLink.value;
 
-  api.addCardToServer(title, link)
-    .then(data => {
-      this.section.prependItem(createCardItem(data, myId))
-      this.closePopup();
-      popupAddForm.reset();
-    })
-    .catch(err => {
-      console.log(err);
-    })
-    .finally(() => {
-      evt.submitter.value = 'Сохранить';
-    });
+  // api.addCardToServer(dataPop.title, dataPop.link)
+  //   .then(data => {
+  //     section.prependItem(createCardItem(data, myId))
+  //     addPop.closePopup();
+  //   })
+  //   .catch(err => {
+  //     console.log(err);
+  //   })
+  //   .finally(() => {
+  //     evt.submitter.value = 'Сохранить';
+  //   });
 }
 //-------------------------------------------------------------
 function handleAvatarFormSubmit(evt) {
@@ -71,8 +72,7 @@ function handleAvatarFormSubmit(evt) {
   api.updateAvatar(newAvatar)
     .then((data) => {
       profileAvatar.src = data.avatar;
-      this.closePopup();
-      popupAvatarForm.reset();
+      avatarPop.closePopup();
     })
     .catch((err) => {
       console.error(err);
@@ -90,8 +90,7 @@ function handleSetUserInfo(evt) {
   const newAbout = popupDescription.value;
   api.updateUserInfo(newName, newAbout)
     .then((data) => {
-    profileName.textContent = data.name;
-    profileDescription.textContent = data.about;
+    userInfo.setUserInfo(data);
     editPop.closePopup();
   })
   .catch((err) => {
@@ -125,7 +124,7 @@ avatarEditButton.addEventListener('click', (evt) => {
 });
 ////////////////////////////////////////////////////////////////////////
 // Добавление места
-const addPop = new PopupWithForm ({popup:addPopup, handlerFormSubmit:handleAddCardSubmit, section:section, closeButtonsSelector: closeButtonsSelector});
+const addPop = new PopupWithForm ({popup:addPopup, handlerFormSubmit:handleAddCardSubmit, closeButtonsSelector: closeButtonsSelector});
 new FormValidator({configObject: configObject, formElement: popupAddForm}).enableValidation()
 addButton.addEventListener('click', (evt) => {
   evt.stopPropagation();
@@ -133,13 +132,17 @@ addButton.addEventListener('click', (evt) => {
 });
 ////////////////////////////////////////////////////////////////////////
 // Правка профайла
-const userInfo = new UserInfo({api: api, profileName:profileName, profileDescription:profileDescription, profileAvatar:profileAvatar});
+const userInfo = new UserInfo({profileName:profileName, profileDescription:profileDescription, profileAvatar:profileAvatar});
 const editPop = new PopupWithForm({popup:editPopup, handlerFormSubmit:handleSetUserInfo, closeButtonsSelector:closeButtonsSelector});
 new FormValidator({configObject: configObject, formElement: popupEditForm}).enableValidation()
 editButton.addEventListener('click', (evt) => {
   evt.stopPropagation();
-  popupName.value = profileName.textContent;
-  popupDescription.value = profileDescription.textContent;
+  // popupName.value = profileName.textContent;
+  // popupDescription.value = profileDescription.textContent;
+  const { name, about } = userInfo.getUserInfo();
+  popupName.value = name;
+  popupDescription.value = about;
+
   editPop.openPopup()
 });
 ////////////////////////////////////////////////////////////////////////
@@ -156,10 +159,10 @@ const photoPop = new PopupWithImage(
 ////////////////////////////////////////////////////////////////////////
 
 // Первичное заполнение
-Promise.all([userInfo.getUserInfo(), api.getInitialCards()])
+Promise.all([api.getUserInfo(), api.getInitialCards()])
 .then(([userData, cards]) => {
   myId = userData._id;
-  userInfo.renderUserInfo(userData)
+  userInfo.setUserInfo({name: userData.name, about: userData.about, avatar: userData.avatar, _id: userData._id}) ////////////////////////////// TODO деструктуризация
   section.renderItems({items: cards, userData: userData})
 })
 .catch(err => {
