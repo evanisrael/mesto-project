@@ -1,5 +1,6 @@
 # Project "Mesto"
 
+# Репозиторий партнера: https://github.com/a1exxy/mesto-project
 
 ### Project description 📝
 
