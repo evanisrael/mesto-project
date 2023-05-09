@@ -29,7 +29,7 @@ The project is available [here](https://marehori.github.io/mesto-project/)
 
 ### Contact me test📧
 
-* Email: kwentar@gmail.com
+* Email: me@ivanisrael.pro
 * LinkedIn: [Profile](https://www.linkedin.com/in/ivan-israel/)
 
 
@@ -58,6 +58,6 @@ The project is available [here](https://marehori.github.io/mesto-project/)
 Проект доступен по [ссылке](https://marehori.github.io/mesto-project/)
 
 ### Для связи 📧
-* Email: kwentar@gmail.com
+* Email: me@ivanisrael.pro
 * LinkedIn: [Профиль](https://www.linkedin.com/in/ivan-israel/)
 
